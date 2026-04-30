@@ -18,8 +18,8 @@ test('Block 1 — basic page shows required sections', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Базова інформація' })).toBeVisible();
   await expect(page.getByText('Демографічна інформація')).toBeVisible();
   await expect(page.getByText('Освіта')).toBeVisible();
-  await expect(page.getByText('Мови')).toBeVisible();
-  await expect(page.getByText('Кваліфікації')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Мови' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Кваліфікації' })).toBeVisible();
 });
 
 test('Block 1 — Next button disabled until required questions answered', async ({ page }) => {
@@ -69,7 +69,7 @@ test('Block 1 → Block 2 — declaring drones shows only drone verification que
   const leadershipSection = page
     .locator('section')
     .filter({ has: page.getByText('Чи мали ви досвід керівництва') });
-  await leadershipSection.getByText('Ні').click();
+  await leadershipSection.getByText('Ні', { exact: true }).click();
 
   // Language
   const uaSection = page
@@ -77,7 +77,7 @@ test('Block 1 → Block 2 — declaring drones shows only drone verification que
     .or(page.locator('section').filter({ has: page.getByText('Українська мова') }))
     .first();
   await uaSection.getByText('Рідна мова').first().click();
-  await page.getByText('Англійська мова').locator('..').locator('..').getByText('Не знаю').click();
+  await page.getByLabel('Англійська мова').getByText('Не знаю').click();
 
   // Declare drone piloting
   const droneSection = page
@@ -89,20 +89,22 @@ test('Block 1 → Block 2 — declaring drones shows only drone verification que
   const deminingSection = page
     .locator('section')
     .filter({ has: page.getByText('Розмінування / EOD') });
-  await deminingSection.getByText('Ні').click();
+  await deminingSection.getByText('Ні', { exact: true }).click();
   const radarSection = page
     .locator('section')
     .filter({ has: page.getByText('РЛС / радіотехніка') });
-  await radarSection.getByText('Ні').click();
+  await radarSection.getByText('Ні', { exact: true }).click();
 
-  // Click Далі (might still be disabled if some required qual answers missing)
-  // Navigate directly to verification for this test
-  await page.goto('/survey/verification');
+  // All required questions answered — click Далі for client-side navigation (preserves Zustand state)
+  const daliButton = page.getByRole('button', { name: 'Далі' });
+  await expect(daliButton).not.toBeDisabled();
+  await daliButton.click();
+  await page.waitForURL('/survey/verification');
 
   await expect(page.getByRole('heading', { name: 'Технічна перевірка' })).toBeVisible();
   await expect(page.getByText(/Питання 1 з 3/)).toBeVisible();
-  // Should show drone GPS question
-  await expect(page.getByText(/GPS/i)).toBeVisible();
+  // Should show drone GPS lock question prompt
+  await expect(page.getByText(/GPS lock/i)).toBeVisible();
 });
 
 test('Block 2 — navigation through all drone questions to completion', async ({ page }) => {
