@@ -36,6 +36,6 @@ test('full intro flow navigates through all blocks', async ({ page }) => {
   // Progress bar should show step 2
   await expect(page.getByText(/Крок 2 з 7.*Базова інформація/)).toBeVisible();
 
-  // BlockPlaceholder should be visible
-  await expect(page.getByText('Блок: Базова інформація')).toBeVisible();
+  // BasicInfoBlock heading should be visible
+  await expect(page.getByRole('heading', { name: 'Базова інформація' })).toBeVisible();
 });
