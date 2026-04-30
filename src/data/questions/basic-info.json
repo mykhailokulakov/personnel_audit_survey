@@ -1,0 +1,214 @@
+{
+  "sections": [
+    {
+      "id": "demographics",
+      "titleUa": "Демографічна інформація",
+      "questions": [
+        {
+          "id": "basic_age",
+          "type": "single-choice",
+          "required": true,
+          "promptUa": "Ваш вік",
+          "options": [
+            { "id": "age_lt18", "textUa": "До 18 років" },
+            { "id": "age_18_25", "textUa": "18–25 років" },
+            { "id": "age_26_35", "textUa": "26–35 років" },
+            { "id": "age_36_45", "textUa": "36–45 років" },
+            { "id": "age_46_55", "textUa": "46–55 років" },
+            { "id": "age_56_65", "textUa": "56–65 років" },
+            { "id": "age_gt65", "textUa": "Понад 65 років" }
+          ]
+        },
+        {
+          "id": "basic_gender",
+          "type": "single-choice",
+          "required": true,
+          "promptUa": "Стать",
+          "options": [
+            { "id": "gender_male", "textUa": "Чоловіча" },
+            { "id": "gender_female", "textUa": "Жіноча" },
+            { "id": "gender_decline", "textUa": "Відмовляюсь відповідати" }
+          ]
+        },
+        {
+          "id": "basic_region",
+          "type": "single-choice",
+          "required": true,
+          "promptUa": "Регіон проживання",
+          "options": [
+            { "id": "reg_vinnytsia", "textUa": "Вінницька область" },
+            { "id": "reg_volyn", "textUa": "Волинська область" },
+            { "id": "reg_dnipro", "textUa": "Дніпропетровська область" },
+            { "id": "reg_donetsk", "textUa": "Донецька область" },
+            { "id": "reg_zhytomyr", "textUa": "Житомирська область" },
+            { "id": "reg_zakarpattia", "textUa": "Закарпатська область" },
+            { "id": "reg_zaporizhzhia", "textUa": "Запорізька область" },
+            { "id": "reg_ivanofrankivsk", "textUa": "Івано-Франківська область" },
+            { "id": "reg_kyiv_obl", "textUa": "Київська область" },
+            { "id": "reg_kirovohrad", "textUa": "Кіровоградська область" },
+            { "id": "reg_luhansk", "textUa": "Луганська область" },
+            { "id": "reg_lviv", "textUa": "Львівська область" },
+            { "id": "reg_mykolaiv", "textUa": "Миколаївська область" },
+            { "id": "reg_odesa", "textUa": "Одеська область" },
+            { "id": "reg_poltava", "textUa": "Полтавська область" },
+            { "id": "reg_rivne", "textUa": "Рівненська область" },
+            { "id": "reg_sumy", "textUa": "Сумська область" },
+            { "id": "reg_ternopil", "textUa": "Тернопільська область" },
+            { "id": "reg_kharkiv", "textUa": "Харківська область" },
+            { "id": "reg_kherson", "textUa": "Херсонська область" },
+            { "id": "reg_khmelnytskyi", "textUa": "Хмельницька область" },
+            { "id": "reg_cherkasy", "textUa": "Черкаська область" },
+            { "id": "reg_chernivtsi", "textUa": "Чернівецька область" },
+            { "id": "reg_chernihiv", "textUa": "Чернігівська область" },
+            { "id": "reg_kyiv_city", "textUa": "м. Київ" },
+            { "id": "reg_abroad", "textUa": "За межами України" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "education",
+      "titleUa": "Освіта",
+      "questions": [
+        {
+          "id": "basic_edu_level",
+          "type": "single-choice",
+          "required": true,
+          "promptUa": "Рівень освіти",
+          "options": [
+            { "id": "edu_none", "textUa": "Без формальної освіти" },
+            { "id": "edu_secondary", "textUa": "Середня загальна (школа)" },
+            { "id": "edu_vocational", "textUa": "Професійно-технічна (ПТУ, коледж)" },
+            { "id": "edu_bachelor", "textUa": "Вища — бакалавр" },
+            { "id": "edu_master", "textUa": "Вища — магістр або спеціаліст" },
+            { "id": "edu_phd", "textUa": "Науковий ступінь (кандидат або доктор наук)" }
+          ]
+        },
+        {
+          "id": "basic_edu_field",
+          "type": "single-choice",
+          "required": true,
+          "promptUa": "Напрям освіти",
+          "options": [
+            { "id": "field_tech", "textUa": "Технічний або інженерний" },
+            { "id": "field_humanities", "textUa": "Гуманітарний або соціальний" },
+            { "id": "field_natural", "textUa": "Природничий або математичний" },
+            { "id": "field_medicine", "textUa": "Медицина або охорона здоров'я" },
+            { "id": "field_law", "textUa": "Юридичний або правовий" },
+            { "id": "field_economics", "textUa": "Економіка, фінанси або управління" },
+            { "id": "field_military", "textUa": "Військовий або правоохоронний" },
+            { "id": "field_other", "textUa": "Інший" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "career",
+      "titleUa": "Зайнятість та досвід",
+      "questions": [
+        {
+          "id": "basic_occupation",
+          "type": "single-choice",
+          "required": true,
+          "promptUa": "Поточна зайнятість",
+          "options": [
+            { "id": "occ_student", "textUa": "Студент або учень" },
+            { "id": "occ_employed", "textUa": "Найманий працівник" },
+            { "id": "occ_entrepreneur", "textUa": "Підприємець або самозайнятий" },
+            { "id": "occ_unemployed", "textUa": "Не маю роботи" },
+            { "id": "occ_military", "textUa": "Військовослужбовець" },
+            { "id": "occ_civil_servant", "textUa": "Державний або муніципальний службовець" },
+            { "id": "occ_other", "textUa": "Інше" }
+          ]
+        },
+        {
+          "id": "basic_occupation_other",
+          "type": "text",
+          "required": false,
+          "conditionalOn": { "questionId": "basic_occupation", "optionId": "occ_other" },
+          "promptUa": "Уточніть рід занять",
+          "maxLength": 100,
+          "placeholder": "Наприклад: домогосподарка, волонтер"
+        },
+        {
+          "id": "basic_work_experience",
+          "type": "single-choice",
+          "required": true,
+          "promptUa": "Загальний трудовий стаж",
+          "options": [
+            { "id": "exp_lt1", "textUa": "Менше 1 року" },
+            { "id": "exp_1_3", "textUa": "1–3 роки" },
+            { "id": "exp_3_7", "textUa": "3–7 років" },
+            { "id": "exp_7_15", "textUa": "7–15 років" },
+            { "id": "exp_gt15", "textUa": "Понад 15 років" }
+          ]
+        },
+        {
+          "id": "basic_leadership_yn",
+          "type": "boolean",
+          "required": true,
+          "promptUa": "Чи мали ви досвід керівництва командою або групою?"
+        },
+        {
+          "id": "basic_team_size",
+          "type": "single-choice",
+          "required": false,
+          "conditionalOn": { "questionId": "basic_leadership_yn", "value": true },
+          "promptUa": "Найбільша кількість людей у вашому безпосередньому підпорядкуванні",
+          "options": [
+            { "id": "team_1_3", "textUa": "1–3 особи" },
+            { "id": "team_4_10", "textUa": "4–10 осіб" },
+            { "id": "team_11_30", "textUa": "11–30 осіб" },
+            { "id": "team_gt30", "textUa": "Понад 30 осіб" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "languages",
+      "titleUa": "Мови",
+      "questions": [
+        {
+          "id": "basic_lang_ua",
+          "type": "single-choice",
+          "required": true,
+          "promptUa": "Українська мова",
+          "options": [
+            { "id": "lang_none", "textUa": "Не знаю" },
+            { "id": "lang_basic", "textUa": "Базовий — розумію, але важко говорю" },
+            {
+              "id": "lang_intermediate",
+              "textUa": "Середній — вільно розумію, говорю з помилками"
+            },
+            { "id": "lang_advanced", "textUa": "Впевнений — вільно говорю і пишу" },
+            { "id": "lang_native", "textUa": "Рідна мова" }
+          ]
+        },
+        {
+          "id": "basic_lang_en",
+          "type": "single-choice",
+          "required": true,
+          "promptUa": "Англійська мова",
+          "options": [
+            { "id": "lang_none", "textUa": "Не знаю" },
+            { "id": "lang_basic", "textUa": "Базовий — розумію, але важко говорю" },
+            {
+              "id": "lang_intermediate",
+              "textUa": "Середній — вільно розумію, говорю з помилками"
+            },
+            { "id": "lang_advanced", "textUa": "Впевнений — вільно говорю і пишу" },
+            { "id": "lang_native", "textUa": "Рідна мова" }
+          ]
+        },
+        {
+          "id": "basic_lang_other",
+          "type": "text",
+          "required": false,
+          "promptUa": "Інші мови та рівень володіння (необов'язково)",
+          "maxLength": 100,
+          "placeholder": "Наприклад: польська — середній, німецька — базовий"
+        }
+      ]
+    }
+  ]
+}

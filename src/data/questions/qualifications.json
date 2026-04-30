@@ -1,0 +1,199 @@
+{
+  "sections": [
+    {
+      "id": "driving",
+      "titleUa": "Водійські права",
+      "questions": [
+        {
+          "id": "qual_driving_categories",
+          "type": "multi-choice",
+          "required": false,
+          "promptUa": "Які категорії водійського посвідчення маєте?",
+          "note": "Оберіть усі наявні",
+          "options": [
+            { "id": "cat_B", "textUa": "B — легковий автомобіль" },
+            { "id": "cat_C", "textUa": "C — вантажний автомобіль (понад 3,5 т)" },
+            { "id": "cat_D", "textUa": "D — автобус (більше 8 пасажирів)" },
+            { "id": "cat_E", "textUa": "E — причіп (у поєднанні з B/C/D)" },
+            { "id": "cat_A", "textUa": "A — мотоцикл" },
+            { "id": "cat_other", "textUa": "Інша категорія" }
+          ]
+        },
+        {
+          "id": "qual_driving_experience",
+          "type": "single-choice",
+          "required": false,
+          "conditionalOn": { "questionId": "qual_driving_categories", "notEmpty": true },
+          "promptUa": "Загальний стаж водіння",
+          "options": [
+            { "id": "drv_exp_lt1", "textUa": "Менше 1 року" },
+            { "id": "drv_exp_1_3", "textUa": "1–3 роки" },
+            { "id": "drv_exp_3_7", "textUa": "3–7 років" },
+            { "id": "drv_exp_7_15", "textUa": "7–15 років" },
+            { "id": "drv_exp_gt15", "textUa": "Понад 15 років" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "demining",
+      "titleUa": "Розмінування / EOD",
+      "questions": [
+        {
+          "id": "qual_demining_yn",
+          "type": "boolean",
+          "required": true,
+          "promptUa": "Маєте сертифікат сапера або досвід EOD-розмінування?"
+        },
+        {
+          "id": "qual_demining_level",
+          "type": "single-choice",
+          "required": false,
+          "conditionalOn": { "questionId": "qual_demining_yn", "value": true },
+          "promptUa": "Рівень підготовки у сфері розмінування",
+          "options": [
+            { "id": "dem_beginner", "textUa": "Початковий — базовий курс, обмежена практика" },
+            { "id": "dem_intermediate", "textUa": "Середній — самостійна робота, польовий досвід" },
+            { "id": "dem_expert", "textUa": "Експертний — навчаю інших, склав сертифікацію" }
+          ]
+        },
+        {
+          "id": "qual_demining_years",
+          "type": "single-choice",
+          "required": false,
+          "conditionalOn": { "questionId": "qual_demining_yn", "value": true },
+          "promptUa": "Стаж у сфері розмінування",
+          "options": [
+            { "id": "dem_exp_lt1", "textUa": "Менше 1 року" },
+            { "id": "dem_exp_1_3", "textUa": "1–3 роки" },
+            { "id": "dem_exp_3_7", "textUa": "3–7 років" },
+            { "id": "dem_exp_7_15", "textUa": "7–15 років" },
+            { "id": "dem_exp_gt15", "textUa": "Понад 15 років" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "drone-piloting",
+      "titleUa": "Пілотування БПЛА (дрони)",
+      "questions": [
+        {
+          "id": "qual_drone_piloting_yn",
+          "type": "boolean",
+          "required": true,
+          "promptUa": "Маєте досвід пілотування БПЛА (дронів)?"
+        },
+        {
+          "id": "qual_drone_types",
+          "type": "multi-choice",
+          "required": false,
+          "conditionalOn": { "questionId": "qual_drone_piloting_yn", "value": true },
+          "promptUa": "Типи БПЛА, якими керували",
+          "options": [
+            { "id": "drone_quadcopter", "textUa": "Цивільний мультикоптер (DJI, квадрокоптер)" },
+            { "id": "drone_fpv", "textUa": "FPV-дрон (від першої особи)" },
+            { "id": "drone_fixedwing", "textUa": "Фіксованокрилий (літак)" },
+            { "id": "drone_military", "textUa": "Військовий БПЛА (включно з ударними)" }
+          ]
+        },
+        {
+          "id": "qual_drone_level",
+          "type": "single-choice",
+          "required": false,
+          "conditionalOn": { "questionId": "qual_drone_piloting_yn", "value": true },
+          "promptUa": "Рівень підготовки з пілотування БПЛА",
+          "options": [
+            { "id": "dro_beginner", "textUa": "Початковий — базові польоти, хобі" },
+            { "id": "dro_intermediate", "textUa": "Середній — впевнений пілот, знаю налаштування" },
+            { "id": "dro_expert", "textUa": "Експертний — навчаю, знаю технічну частину" }
+          ]
+        },
+        {
+          "id": "qual_drone_hours",
+          "type": "single-choice",
+          "required": false,
+          "conditionalOn": { "questionId": "qual_drone_piloting_yn", "value": true },
+          "promptUa": "Загальний наліт",
+          "options": [
+            { "id": "dro_hrs_lt10", "textUa": "Менше 10 годин" },
+            { "id": "dro_hrs_10_50", "textUa": "10–50 годин" },
+            { "id": "dro_hrs_50_200", "textUa": "50–200 годин" },
+            { "id": "dro_hrs_gt200", "textUa": "Понад 200 годин" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "radar-radiotech",
+      "titleUa": "РЛС / радіотехніка",
+      "questions": [
+        {
+          "id": "qual_radar_radiotech_yn",
+          "type": "boolean",
+          "required": true,
+          "promptUa": "Маєте знання або досвід у сфері РЛС або радіотехніки?"
+        },
+        {
+          "id": "qual_radar_level",
+          "type": "single-choice",
+          "required": false,
+          "conditionalOn": { "questionId": "qual_radar_radiotech_yn", "value": true },
+          "promptUa": "Рівень підготовки у сфері РЛС або радіотехніки",
+          "options": [
+            { "id": "rad_beginner", "textUa": "Початковий — загальне розуміння принципів" },
+            { "id": "rad_intermediate", "textUa": "Середній — практичний досвід з обладнанням" },
+            { "id": "rad_expert", "textUa": "Експертний — проектування або налаштування систем" }
+          ]
+        },
+        {
+          "id": "qual_radar_years",
+          "type": "single-choice",
+          "required": false,
+          "conditionalOn": { "questionId": "qual_radar_radiotech_yn", "value": true },
+          "promptUa": "Стаж у сфері РЛС або радіотехніки",
+          "options": [
+            { "id": "rad_exp_lt1", "textUa": "Менше 1 року" },
+            { "id": "rad_exp_1_3", "textUa": "1–3 роки" },
+            { "id": "rad_exp_3_7", "textUa": "3–7 років" },
+            { "id": "rad_exp_7_15", "textUa": "7–15 років" },
+            { "id": "rad_exp_gt15", "textUa": "Понад 15 років" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "other-skills",
+      "titleUa": "Інші технічні навички",
+      "questions": [
+        {
+          "id": "qual_other_skills",
+          "type": "multi-choice",
+          "required": false,
+          "promptUa": "Оберіть інші технічні навички, якими ви володієте",
+          "note": "Оберіть усі відповідні (необов'язково)",
+          "options": [
+            { "id": "skill_programming", "textUa": "Програмування або розробка ПЗ" },
+            {
+              "id": "skill_networking",
+              "textUa": "Мережеве адміністрування або ІТ-інфраструктура"
+            },
+            { "id": "skill_electronics", "textUa": "Електроніка або схемотехніка" },
+            { "id": "skill_mechanics", "textUa": "Механіка або слюсарна справа" },
+            { "id": "skill_medicine", "textUa": "Медицина або невідкладна допомога" },
+            { "id": "skill_engineering", "textUa": "Інженерні або будівельні роботи" },
+            { "id": "skill_other", "textUa": "Інше" }
+          ]
+        },
+        {
+          "id": "qual_other_skills_text",
+          "type": "text",
+          "required": false,
+          "conditionalOn": { "questionId": "qual_other_skills", "includes": "skill_other" },
+          "promptUa": "Уточніть «Інше»",
+          "maxLength": 100,
+          "placeholder": "Опишіть коротко"
+        }
+      ]
+    }
+  ]
+}
