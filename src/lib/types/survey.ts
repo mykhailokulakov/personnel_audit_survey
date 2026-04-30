@@ -1,5 +1,55 @@
 import type { ProfileAxis } from './axes';
 
+/** Highest completed level of formal education. */
+export type EducationLevel = 'none' | 'secondary' | 'vocational' | 'bachelor' | 'master' | 'phd';
+
+/** Broad domain of education or professional background. */
+export type EducationField =
+  | 'technical'
+  | 'humanitarian'
+  | 'natural-sciences'
+  | 'medicine'
+  | 'law'
+  | 'economics'
+  | 'military'
+  | 'other';
+
+/** Primary occupation category of the respondent. */
+export type Occupation =
+  | 'student'
+  | 'employed'
+  | 'entrepreneur'
+  | 'unemployed'
+  | 'military'
+  | 'civil-servant'
+  | 'other';
+
+/** Self-assessed proficiency level in a language. */
+export type LanguageLevel = 'none' | 'basic' | 'intermediate' | 'advanced' | 'native';
+
+/** Ukrainian driver licence categories as defined by Ukrainian traffic law. */
+export type DriverLicenseCategory = 'A' | 'B' | 'C' | 'D' | 'E' | 'other';
+
+/** Identifies a technical qualification domain for verification and scoring. */
+export type TechQualification =
+  | 'demining'
+  | 'drone-piloting'
+  | 'radar-radiotech'
+  | 'driving'
+  | 'other';
+
+/** Self-reported declaration of a single technical qualification. */
+export type QualificationDeclaration = {
+  /** The qualification domain being declared. */
+  type: TechQualification;
+  /** Respondent's own assessment of their skill level. */
+  selfReportedLevel: 'beginner' | 'intermediate' | 'expert';
+  /** Approximate years of experience in this qualification. */
+  yearsOfExperience: number;
+  /** Optional free-text clarification (max 100 chars). */
+  comment?: string;
+};
+
 /** Identifies a survey block by its logical name. */
 export type BlockId =
   | 'intro'

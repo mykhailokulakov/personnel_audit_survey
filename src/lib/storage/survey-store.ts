@@ -1,6 +1,15 @@
 import { create } from 'zustand';
-import type { BlockId, BlockStatus, QuestionId, Answer, AnswerRecord } from '../types/survey';
+import { useShallow } from 'zustand/react/shallow';
+import type {
+  BlockId,
+  BlockStatus,
+  QuestionId,
+  Answer,
+  AnswerRecord,
+  TechQualification,
+} from '../types/survey';
 import type { Consents, RespondentSession } from '../types/respondent';
+import { getDeclaredCriticalQualifications } from '../survey/question-helpers';
 
 type SurveyActions = {
   /** Set the respondent code and initialise currentBlock to 'intro' if not already set. */
@@ -91,3 +100,11 @@ export const useAnswerByQuestionId = (questionId: QuestionId): AnswerRecord | un
 /** Returns true when the given block has been marked completed. */
 export const useIsBlockCompleted = (blockId: BlockId): boolean =>
   useSurveyStore((s) => s.blockStatus.get(blockId) === 'completed');
+
+/**
+ * Returns the list of critical TechQualifications the respondent has declared in Block 1.
+ * A qualification is considered declared when its yes/no question is answered true.
+ * Uses shallow equality to avoid infinite render loops from array identity changes.
+ */
+export const useDeclaredCriticalQualifications = (): TechQualification[] =>
+  useSurveyStore(useShallow((s) => getDeclaredCriticalQualifications(s.answers)));

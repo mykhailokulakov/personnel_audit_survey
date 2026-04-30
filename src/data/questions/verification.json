@@ -1,0 +1,352 @@
+{
+  "questions": [
+    {
+      "id": "ver_dem_01",
+      "qualification": "demining",
+      "promptUa": "Яка перша дія при виявленні підозрілого предмета (ВНП) у полі?",
+      "options": [
+        {
+          "id": "ver_dem_01_a",
+          "textUa": "Зупинитися на місці, не торкатися предмета і повільно відступити тим самим шляхом, яким прийшли",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_dem_01_b",
+          "textUa": "Підійти ближче, щоб краще роздивитися предмет і визначити його тип",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dem_01_c",
+          "textUa": "Позначити місце кілочком або стрічкою та продовжити рух",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dem_01_d",
+          "textUa": "Сповістити командира по рації, не змінюючи поточного положення",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_dem_01_a",
+      "sourceNote": "IMAS 09.30 — стандартна послідовність S-M-E-A: Stop, Mark, Evacuate, Announce. Перша дія — зупинитися і відступити власним шляхом (back-track). STANAG 2592."
+    },
+    {
+      "id": "ver_dem_02",
+      "qualification": "demining",
+      "promptUa": "Під яким кутом до поверхні землі вводять щуп (зонд) при ручному пошуку мін?",
+      "options": [
+        {
+          "id": "ver_dem_02_a",
+          "textUa": "Строго вертикально (90°) для максимального заглиблення",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dem_02_b",
+          "textUa": "Під кутом не більше 30° до поверхні (майже горизонтально)",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_dem_02_c",
+          "textUa": "Під кутом 45° — стандартний кут занурення",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dem_02_d",
+          "textUa": "Під кутом 60–70° для контролю глибини",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_dem_02_b",
+      "sourceNote": "IMAS 09.10 — стандартна техніка зондування (probing). Кут ≤30° запобігає прямому тиску на нажимний механізм міни. Навчальні матеріали HALO Trust та Danish Demining Group."
+    },
+    {
+      "id": "ver_dem_03",
+      "qualification": "demining",
+      "promptUa": "Що таке «безпечний коридор» (safe lane) при розмінуванні?",
+      "options": [
+        {
+          "id": "ver_dem_03_a",
+          "textUa": "Перевірена і позначена смуга землі, у межах якої підтверджена відсутність ВНП",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_dem_03_b",
+          "textUa": "Відстань між двома саперами під час спільної роботи на ділянці",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dem_03_c",
+          "textUa": "Мінімальна дистанція відступу при виявленні небезпечного предмета",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dem_03_d",
+          "textUa": "Зона, де дозволено рухатися лише після отримання сигналу від командира",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_dem_03_a",
+      "sourceNote": "IMAS 09.10 — визначення «safe lane / cleared lane». Загальновідомий термін у практиці розмінування та підготовці саперів."
+    },
+    {
+      "id": "ver_dro_01",
+      "qualification": "drone-piloting",
+      "promptUa": "Що означає статус «GPS lock» (фіксація GPS) на БПЛА перед зльотом?",
+      "options": [
+        {
+          "id": "ver_dro_01_a",
+          "textUa": "БПЛА встановив зв'язок із пультом через GPS-канал",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dro_01_b",
+          "textUa": "GPS-модуль заблокований від стороннього злому або підміни сигналу",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dro_01_c",
+          "textUa": "БПЛА отримав стабільний сигнал від достатньої кількості супутників і визначив точне місцеположення",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_dro_01_d",
+          "textUa": "GPS-навігація увімкнена і готова до роботи в режимі реального часу",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_dro_01_c",
+      "sourceNote": "Стандартна концепція GNSS lock у документації ArduPilot, DJI SDK, Betaflight. Мінімум 6 супутників і HDOP < 2.0 для надійного Position Hold."
+    },
+    {
+      "id": "ver_dro_02",
+      "qualification": "drone-piloting",
+      "promptUa": "Що відбувається при активації функції Return-to-Home (RTH) внаслідок втрати RC-сигналу?",
+      "options": [
+        {
+          "id": "ver_dro_02_a",
+          "textUa": "Дрон зависає в поточній точці і чекає відновлення сигналу",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dro_02_b",
+          "textUa": "Дрон піднімається до заданої висоти повернення та летить по прямій до точки зльоту",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_dro_02_c",
+          "textUa": "Дрон здійснює аварійну посадку прямо на місці без набору висоти",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dro_02_d",
+          "textUa": "Дрон продовжує виконувати останнє встановлене завдання автономно",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_dro_02_b",
+      "sourceNote": "Стандартна поведінка RTH у DJI (Intelligent Flight Battery failsafe), ArduCopter (RTL mode), Betaflight (failsafe → RTH). Спочатку підйом до RTH altitude, потім повернення до Home."
+    },
+    {
+      "id": "ver_dro_03",
+      "qualification": "drone-piloting",
+      "promptUa": "Що таке «failsafe» у контексті польотного контролера БПЛА?",
+      "options": [
+        {
+          "id": "ver_dro_03_a",
+          "textUa": "Захист акумулятора від глибокого розряду — автоматичне відключення при низькому напрузі",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dro_03_b",
+          "textUa": "Запасний канал керування, що активується при збої основного каналу",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_dro_03_c",
+          "textUa": "Автоматична реакція польотного контролера при втраті RC-сигналу або іншій критичній помилці",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_dro_03_d",
+          "textUa": "Стан, у якому ESC перегрівся та тимчасово вимкнений для охолодження",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_dro_03_c",
+      "sourceNote": "Концепція failsafe — базова в документації польотних контролерів: Betaflight (Failsafe Configuration), ArduPilot (Failsafe Mechanisms), PX4 (Safety). Загальновідомий факт серед пілотів БПЛА."
+    },
+    {
+      "id": "ver_rad_01",
+      "qualification": "radar-radiotech",
+      "promptUa": "Що таке діаграма спрямованості антени?",
+      "options": [
+        {
+          "id": "ver_rad_01_a",
+          "textUa": "Схема підключення антени до приймача або передавача",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_rad_01_b",
+          "textUa": "Графік залежності потужності сигналу від частоти",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_rad_01_c",
+          "textUa": "Графічне відображення просторового розподілу інтенсивності випромінювання (або чутливості прийому) антени",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_rad_01_d",
+          "textUa": "Таблиця розрахунку коефіцієнта підсилення антени в дБ",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_rad_01_c",
+      "sourceNote": "Загальновідоме визначення з підручників антенної техніки (Айзенберг «Антени УКХ», Марков «Антени»). Стандартне визначення МСЕ-Р."
+    },
+    {
+      "id": "ver_rad_02",
+      "qualification": "radar-radiotech",
+      "promptUa": "Ефект Доплера у РЛС — що він дозволяє визначити?",
+      "options": [
+        {
+          "id": "ver_rad_02_a",
+          "textUa": "Точні координати цілі відносно РЛС за двома кутами",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_rad_02_b",
+          "textUa": "Висоту цілі за кутом місця антени",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_rad_02_c",
+          "textUa": "Швидкість та напрямок руху цілі відносно РЛС за зміною частоти відбитого сигналу",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_rad_02_d",
+          "textUa": "Ефективну площу відбиття (ЕПР) цілі за амплітудою відбитого сигналу",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_rad_02_c",
+      "sourceNote": "Загальновідомий принцип ефекту Доплера у РЛС. Застосовується в доплерівських і когерентних РЛС для визначення радіальної швидкості цілі (Skolnik «Introduction to Radar Systems»)."
+    },
+    {
+      "id": "ver_rad_03",
+      "qualification": "radar-radiotech",
+      "promptUa": "У якому частотному діапазоні переважно працюють РЛС далекого виявлення повітряних цілей (наприклад, П-18)?",
+      "options": [
+        {
+          "id": "ver_rad_03_a",
+          "textUa": "Сантиметровий (X-діапазон, 8–12 ГГц)",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_rad_03_b",
+          "textUa": "Метровий (VHF, 30–300 МГц)",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_rad_03_c",
+          "textUa": "Міліметровий (W-діапазон, 75–110 ГГц)",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_rad_03_d",
+          "textUa": "Декаметровий (КХ, 3–30 МГц)",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_rad_03_b",
+      "sourceNote": "П-18 Spoon Rest: 150–170 МГц (VHF, метровий діапазон). 5Н84 Tall King: 160–175 МГц. Довгохвильові РЛС стійкіші до стелс-покриттів і широко застосовуються в ППО. Відкриті джерела: Jane's Radar, GlobalSecurity.org."
+    },
+    {
+      "id": "ver_drv_01",
+      "qualification": "driving",
+      "promptUa": "Яка категорія водійського посвідчення необхідна для керування вантажним автомобілем повною масою понад 7,5 тонн?",
+      "options": [
+        {
+          "id": "ver_drv_01_a",
+          "textUa": "Категорія B (автомобілі до 3,5 т)",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_drv_01_b",
+          "textUa": "Категорія BE (автомобіль B з причепом)",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_drv_01_c",
+          "textUa": "Категорія C (вантажні транспортні засоби понад 3,5 т)",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_drv_01_d",
+          "textUa": "Категорія D (автобуси з більш ніж 8 пасажирами)",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_drv_01_c",
+      "sourceNote": "ПДР України, ст. 1 та ст. 15 (Закон України «Про дорожній рух»). Категорія C — транспортні засоби для перевезення вантажів дозволеною максимальною масою понад 3500 кг."
+    },
+    {
+      "id": "ver_drv_02",
+      "qualification": "driving",
+      "promptUa": "Яка максимальна дозволена швидкість у населеному пункті за замовчуванням в Україні?",
+      "options": [
+        {
+          "id": "ver_drv_02_a",
+          "textUa": "40 км/год",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_drv_02_b",
+          "textUa": "50 км/год",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_drv_02_c",
+          "textUa": "60 км/год",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_drv_02_d",
+          "textUa": "70 км/год",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_drv_02_b",
+      "sourceNote": "ПДР України, п. 12.4 (Правила дорожнього руху, затверджені постановою Кабміну № 1306). Максимальна швидкість у населеному пункті — 50 км/год, якщо немає іншого знаку."
+    },
+    {
+      "id": "ver_drv_03",
+      "qualification": "driving",
+      "promptUa": "Яка орієнтовна безпечна дистанція до автомобіля попереду при швидкості 90 км/год на сухій дорозі?",
+      "options": [
+        {
+          "id": "ver_drv_03_a",
+          "textUa": "Близько 20–25 метрів",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_drv_03_b",
+          "textUa": "Близько 45 метрів",
+          "isCorrect": false
+        },
+        {
+          "id": "ver_drv_03_c",
+          "textUa": "Близько 90 метрів (правило: дистанція у метрах ≥ швидкість у км/год)",
+          "isCorrect": true
+        },
+        {
+          "id": "ver_drv_03_d",
+          "textUa": "Близько 200 метрів",
+          "isCorrect": false
+        }
+      ],
+      "correctOptionId": "ver_drv_03_c",
+      "sourceNote": "Практичне правило «дистанція в метрах = швидкість у км/год», широко застосоване в навчанні водіїв і підручниках з ПДД. При 90 км/год — ≥90 м. Загальний шлях гальмування на сухому асфальті становить 80–100 м."
+    }
+  ]
+}
