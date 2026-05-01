@@ -115,4 +115,19 @@ export type QuestionMeta = {
   isReverseScored: boolean;
   /** Links two questions that express the same idea — used for consistency checks. */
   consistencyPairId: string | null;
+  /**
+   * For attention-check questions: the expected Likert value (1–5) or option score (e.g. 3)
+   * the respondent must select. Null for regular questions.
+   */
+  attentionCheckTarget: number | null;
+};
+
+/** Result of evaluating a single attention-check question. */
+export type AttentionCheckResult = {
+  questionId: string;
+  /** The value the respondent was supposed to select. */
+  expectedValue: number;
+  /** The value the respondent actually selected. */
+  actualValue: number;
+  passed: boolean;
 };

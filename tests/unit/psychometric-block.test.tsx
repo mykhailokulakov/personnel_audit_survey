@@ -4,8 +4,10 @@ import userEvent from '@testing-library/user-event';
 import { PsychometricBlock } from '@/components/survey/blocks/PsychometricBlock';
 import { useSurveyStore } from '@/lib/storage/survey-store';
 import psychometricData from '@/data/questions/psychometric.json';
+import attentionChecksData from '@/data/questions/attention-checks.json';
 import type { PsychometricQuestion } from '@/lib/types/psychometric';
 import { deterministicShuffle, shuffleAndSeparatePairs } from '@/lib/storage/shuffle';
+import { buildPsychometricBlockItems } from '@/lib/storage/build-block-questions';
 import type { QuestionId } from '@/lib/types/survey';
 
 vi.mock('next/navigation', () => ({
@@ -13,6 +15,8 @@ vi.mock('next/navigation', () => ({
 }));
 
 const questions = psychometricData.questions as PsychometricQuestion[];
+const AC_COUNT = attentionChecksData.psychometricChecks.length; // 2
+const TOTAL_COUNT = questions.length + AC_COUNT;
 
 beforeEach(() => {
   useSurveyStore.getState().resetSession();
@@ -29,17 +33,31 @@ describe('PsychometricBlock — rendering', () => {
     expect(screen.getByText(/Оцініть/)).toBeInTheDocument();
   });
 
-  it(`renders all ${questions.length} questions`, () => {
+  it(`renders all ${questions.length} main questions`, () => {
     render(<PsychometricBlock />);
     questions.forEach((q) => {
       expect(screen.getByText(q.promptUa)).toBeInTheDocument();
     });
   });
 
+  it('renders attention-check prompts as well', () => {
+    render(<PsychometricBlock />);
+    attentionChecksData.psychometricChecks.forEach((ac) => {
+      expect(screen.getByText(ac.promptUa)).toBeInTheDocument();
+    });
+  });
+
+  it(`renders ${TOTAL_COUNT} questions total (main + attention checks)`, () => {
+    render(<PsychometricBlock />);
+    // Each question has a radiogroup (one per LikertScale/AttentionCheck)
+    const groups = screen.getAllByRole('radiogroup');
+    expect(groups).toHaveLength(TOTAL_COUNT);
+  });
+
   it('renders 5 Likert buttons per question', () => {
     render(<PsychometricBlock />);
     const radios = screen.getAllByRole('radio');
-    expect(radios).toHaveLength(questions.length * 5);
+    expect(radios).toHaveLength(TOTAL_COUNT * 5);
   });
 });
 
@@ -51,8 +69,8 @@ describe('PsychometricBlock — answer recording', () => {
     const radios = screen.getAllByRole('radio');
     await userEvent.click(radios[0]!); // first Likert scale, value 1
 
-    const firstShuffled = shuffleAndSeparatePairs(questions, 'test-code')[0]!;
-    const record = useSurveyStore.getState().answers.get(firstShuffled.id as QuestionId);
+    const firstItem = buildPsychometricBlockItems('test-code')[0]!;
+    const record = useSurveyStore.getState().answers.get(firstItem.id as QuestionId);
     expect(record).toBeDefined();
     expect(record?.answer.type).toBe('likert');
     if (record?.answer.type === 'likert') {
@@ -68,8 +86,8 @@ describe('PsychometricBlock — answer recording', () => {
     await userEvent.click(radios[0]!); // value 1
     await userEvent.click(radios[4]!); // value 5 (same first question)
 
-    const firstShuffled = shuffleAndSeparatePairs(questions, 'test-code')[0]!;
-    const record = useSurveyStore.getState().answers.get(firstShuffled.id as QuestionId);
+    const firstItem = buildPsychometricBlockItems('test-code')[0]!;
+    const record = useSurveyStore.getState().answers.get(firstItem.id as QuestionId);
     if (record?.answer.type === 'likert') {
       expect(record.answer.value).toBe(5);
     }
