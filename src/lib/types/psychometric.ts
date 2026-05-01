@@ -21,6 +21,16 @@ export type PsychometricQuestion = {
   consistencyPairId: string | null;
 };
 
+/**
+ * A Likert item as it appears in the merged Block 4 list.
+ * Regular questions have isAttentionCheck=false; attention-check questions have isAttentionCheck=true
+ * and a non-null attentionCheckTarget indicating which Likert value (1–5) must be selected.
+ */
+export type PsychometricBlockItem = PsychometricQuestion & {
+  isAttentionCheck: boolean;
+  attentionCheckTarget: number | null;
+};
+
 export type PsychometricQuestionBank = {
   questions: PsychometricQuestion[];
 };

@@ -1,0 +1,94 @@
+{
+  "psychometricChecks": [
+    {
+      "id": "ac_psych_01",
+      "promptUa": "Це питання призначене для перевірки уважності. Будь ласка, оберіть відповідь «Не згоден» (2).",
+      "axis": "responsibility",
+      "weight": 0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": null,
+      "isAttentionCheck": true,
+      "attentionCheckTarget": 2
+    },
+    {
+      "id": "ac_psych_02",
+      "promptUa": "Якщо ви читаєте це твердження уважно, оберіть варіант «Нейтрально» (3), а не крайні значення.",
+      "axis": "responsibility",
+      "weight": 0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": null,
+      "isAttentionCheck": true,
+      "attentionCheckTarget": 3
+    }
+  ],
+  "scenariosChecks": [
+    {
+      "id": "ac_sjt_01",
+      "axesTested": ["responsibility"],
+      "promptUa": "Колеги пропонують вам разом підписати завідомо неправдивий звіт, стверджуючи, що «так робить уся команда». Ви розумієте, що це порушує правила та може нашкодити організації. Що ви робите?",
+      "isAttentionCheck": true,
+      "attentionCheckTarget": 3,
+      "options": [
+        {
+          "id": "ac_sjt_01_a",
+          "textUa": "Погоджуюся — якщо всі так роблять, значить, це допустима практика.",
+          "behaviorType": "passive",
+          "score": 0
+        },
+        {
+          "id": "ac_sjt_01_b",
+          "textUa": "Тихо ухиляюся від підписання, але нікому нічого не кажу.",
+          "behaviorType": "social-desirable",
+          "score": 1
+        },
+        {
+          "id": "ac_sjt_01_c",
+          "textUa": "Публічно звинувачую колег у нечесності та залишаю приміщення зі скандалом.",
+          "behaviorType": "impulsive",
+          "score": 0
+        },
+        {
+          "id": "ac_sjt_01_d",
+          "textUa": "Відмовляюся підписувати та пояснюю свою позицію. За потреби повідомляю відповідальну особу.",
+          "behaviorType": "mature",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "ac_sjt_02",
+      "axesTested": ["responsibility"],
+      "promptUa": "Ви виявили, що у вашому звіті, який ще не відправлено керівнику, через технічну помилку вказано завищені показники. Деякі колеги вже це помітили. Що ви робите?",
+      "isAttentionCheck": true,
+      "attentionCheckTarget": 3,
+      "options": [
+        {
+          "id": "ac_sjt_02_a",
+          "textUa": "Нічого не роблю — може, ніхто більше не звернув уваги, і все обійдеться.",
+          "behaviorType": "passive",
+          "score": 0
+        },
+        {
+          "id": "ac_sjt_02_b",
+          "textUa": "Тихо виправляю цифри, не повідомляючи нікого про саму помилку.",
+          "behaviorType": "social-desirable",
+          "score": 1
+        },
+        {
+          "id": "ac_sjt_02_c",
+          "textUa": "Звинувачую когось із колег у помилці, щоб уникнути відповідальності.",
+          "behaviorType": "impulsive",
+          "score": 0
+        },
+        {
+          "id": "ac_sjt_02_d",
+          "textUa": "Негайно виправляю звіт і відкрито повідомляю керівника про помилку та вжиті заходи.",
+          "behaviorType": "mature",
+          "score": 3
+        }
+      ]
+    }
+  ]
+}
