@@ -72,8 +72,11 @@ export type SingleChoiceAnswer = { type: 'single-choice'; optionId: string };
 /** Multi-select answer. */
 export type MultiChoiceAnswer = { type: 'multi-choice'; optionIds: string[] };
 
+/** Discrete value on a 5-point Likert scale. */
+export type LikertValue = 1 | 2 | 3 | 4 | 5;
+
 /** 5-point Likert scale answer. */
-export type LikertAnswer = { type: 'likert'; value: 1 | 2 | 3 | 4 | 5 };
+export type LikertAnswer = { type: 'likert'; value: LikertValue };
 
 /** Free-text answer. */
 export type TextAnswer = { type: 'text'; value: string };
@@ -104,8 +107,12 @@ export type QuestionMeta = {
   id: QuestionId;
   blockId: BlockId;
   axes: ProfileAxis[];
+  /** Convenience single-axis field; null for questions that span multiple axes. */
+  axis: ProfileAxis | null;
   weight: number;
   isLieScale: boolean;
   isAttentionCheck: boolean;
   isReverseScored: boolean;
+  /** Links two questions that express the same idea — used for consistency checks. */
+  consistencyPairId: string | null;
 };

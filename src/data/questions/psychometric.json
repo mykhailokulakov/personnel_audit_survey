@@ -1,0 +1,247 @@
+{
+  "questions": [
+    {
+      "id": "psych_r01",
+      "promptUa": "Якщо я взявся за завдання, я доводжу його до кінця, навіть якщо виникають труднощі.",
+      "axis": "responsibility",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": "cp-r1"
+    },
+    {
+      "id": "psych_l01",
+      "promptUa": "Я беру на себе роль координатора, коли в команді немає чіткого лідера.",
+      "axis": "leadership",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_n01",
+      "promptUa": "Я щиро радію, коли маю можливість навчитися чомусь новому.",
+      "axis": "learnability",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_i01",
+      "promptUa": "Якщо я бачу, що звична робоча процедура неефективна, я починаю її покращувати, навіть якщо ніхто не просить.",
+      "axis": "initiative",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_r02",
+      "promptUa": "Коли щось іде не так, я беру на себе відповідальність, а не шукаю виправдань.",
+      "axis": "responsibility",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_l02",
+      "promptUa": "Я готовий відстоювати свою позицію перед керівником, якщо впевнений у її правильності.",
+      "axis": "leadership",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_lie01",
+      "promptUa": "Я ніколи в житті не запізнювався — ні на роботу, ні на жодну зустріч.",
+      "axis": "responsibility",
+      "weight": 0.0,
+      "isLieScale": true,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_n02",
+      "promptUa": "Критика моєї роботи допомагає мені покращуватися.",
+      "axis": "learnability",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": "cp-n2"
+    },
+    {
+      "id": "psych_i02",
+      "promptUa": "Мені некомфортно, коли в команді є хаос — я беруся його структурувати.",
+      "axis": "initiative",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_r03",
+      "promptUa": "Якщо я розумію, що не встигаю в строк, я заздалегідь повідомляю про це.",
+      "axis": "responsibility",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_l03",
+      "promptUa": "Я ініціюю обговорення, якщо бачу, що команда рухається у хибному напрямку.",
+      "axis": "leadership",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": "cp-l3"
+    },
+    {
+      "id": "psych_n03",
+      "promptUa": "Зміни у звичних процедурах чи інструментах мене швидше дратують, ніж стимулюють.",
+      "axis": "learnability",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": true,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_i03",
+      "promptUa": "Якщо керівник не помічає очевидної проблеми, я вважаю своїм обов'язком привернути його увагу.",
+      "axis": "initiative",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_lie02",
+      "promptUa": "Я завжди говорю правду, навіть якщо це може нашкодити мені.",
+      "axis": "responsibility",
+      "weight": 0.0,
+      "isLieScale": true,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_r04",
+      "promptUa": "Буває, що я залишаю справи незавершеними, якщо вони перестають бути терміновими.",
+      "axis": "responsibility",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": true,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_n04",
+      "promptUa": "Після помилки я аналізую, що пішло не так, щоб не повторити її.",
+      "axis": "learnability",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_l04",
+      "promptUa": "Я уникаю ситуацій, де треба брати на себе відповідальність за рішення.",
+      "axis": "leadership",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": true,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_i04",
+      "promptUa": "Я беруся за завдання поза своєю зоною відповідальності, якщо бачу, що вони не вирішуються.",
+      "axis": "initiative",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": "cp-i4"
+    },
+    {
+      "id": "psych_r05",
+      "promptUa": "Розпочату справу я завжди завершую, незалежно від обставин і труднощів.",
+      "axis": "responsibility",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": "cp-r1"
+    },
+    {
+      "id": "psych_lie03",
+      "promptUa": "Мені ніколи не буває лінь робити те, що треба зробити.",
+      "axis": "learnability",
+      "weight": 0.0,
+      "isLieScale": true,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_n05",
+      "promptUa": "Зауваження щодо моєї роботи я використовую як орієнтир для розвитку.",
+      "axis": "learnability",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": "cp-n2"
+    },
+    {
+      "id": "psych_i05",
+      "promptUa": "Я чекаю, поки хтось інший виправить неефективний процес, і не втручаюся.",
+      "axis": "initiative",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": true,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_l05",
+      "promptUa": "Я вважаю за краще виконувати вказівки, ніж самостійно ухвалювати рішення.",
+      "axis": "leadership",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": true,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_r06",
+      "promptUa": "Мені важко завершити завдання, якщо ніхто не контролює хід роботи.",
+      "axis": "responsibility",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": true,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_i06",
+      "promptUa": "Якщо важливе завдання ніхто не виконує, я беру його на себе, навіть якщо це виходить за межі моїх обов'язків.",
+      "axis": "initiative",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": "cp-i4"
+    },
+    {
+      "id": "psych_lie04",
+      "promptUa": "Я ніколи не розповідав іншим те, що мені розповіли по секрету.",
+      "axis": "responsibility",
+      "weight": 0.0,
+      "isLieScale": true,
+      "isReverseScored": false,
+      "consistencyPairId": null
+    },
+    {
+      "id": "psych_l06",
+      "promptUa": "Якщо я помічаю проблему в роботі колективу, я активно шукаю спосіб її вирішення.",
+      "axis": "leadership",
+      "weight": 1.0,
+      "isLieScale": false,
+      "isReverseScored": false,
+      "consistencyPairId": "cp-l3"
+    }
+  ]
+}
