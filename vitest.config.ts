@@ -16,10 +16,17 @@ export default defineConfig({
         'src/**/index.ts',
         'src/components/ui/**',
         'src/app/**',
+        'src/components/survey/ResultsReport.tsx',
       ],
       provider: 'v8',
       reporter: ['text', 'json-summary', 'json'],
       thresholds: {
+        'src/lib/scoring/**': {
+          lines: 90,
+          statements: 90,
+          functions: 90,
+          branches: 85,
+        },
         'src/lib/**': {
           lines: 80,
           statements: 80,
