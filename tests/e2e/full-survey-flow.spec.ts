@@ -69,30 +69,11 @@ async function completeCognitive(page: Page) {
   await page.waitForURL('/survey/psychometric');
 }
 
-async function completePsychometricWithAttention(page: Page) {
+async function completePsychometric(page: Page) {
   const groups = page.getByRole('radiogroup');
   const count = await groups.count();
-
   for (let i = 0; i < count; i++) {
-    const group = groups.nth(i);
-    const prompt = await group.locator('p, legend, label').first().textContent();
-
-    if (prompt?.includes('Будь ласка, оберіть відповідь «Не згоден» (2)')) {
-      await group.getByRole('radio').nth(1).click();
-    } else if (prompt?.includes('оберіть варіант «Нейтрально» (3)')) {
-      await group.getByRole('radio').nth(2).click();
-    } else if (
-      prompt?.includes('ніколи') ||
-      prompt?.includes('завжди') ||
-      prompt?.includes('ніколи не буває')
-    ) {
-      await group.getByRole('radio').nth(1).click();
-    } else {
-      await group
-        .getByRole('radio')
-        .nth(i % 2 === 0 ? 3 : 4)
-        .click();
-    }
+    await groups.nth(i).getByRole('radio').first().click();
   }
   await page.getByRole('button', { name: 'Далі' }).click();
   await page.waitForURL('/survey/scenarios');
@@ -116,7 +97,7 @@ test('full survey flow — results page, archetype, radar chart, code, and expor
   await completeBasicAndQual(page);
   await skipVerification(page);
   await completeCognitive(page);
-  await completePsychometricWithAttention(page);
+  await completePsychometric(page);
   await completeAllScenarios(page);
 
   await expect(page.getByRole('heading', { name: 'Результати оцінювання' })).toBeVisible();
