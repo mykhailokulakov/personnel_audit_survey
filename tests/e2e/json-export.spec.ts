@@ -78,8 +78,6 @@ async function completeFullSurvey(page: Page, code = 'e2e_json_001') {
 test('json-export — filename and valid ScoringResult shape', async ({ page }) => {
   await completeFullSurvey(page);
 
-  await page.waitForLoadState('networkidle');
-
   const [download] = await Promise.all([
     page.waitForEvent('download'),
     page.getByRole('button', { name: /Завантажити результати/ }).click(),
