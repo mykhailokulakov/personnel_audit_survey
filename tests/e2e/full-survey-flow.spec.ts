@@ -24,8 +24,7 @@ async function completeBasicAndQual(page: Page) {
   const leadershipSection = page
     .locator('section')
     .filter({ has: page.getByText('Чи мали ви досвід керівництва') });
-  await leadershipSection.getByText('Так', { exact: true }).click();
-  await page.getByText('Понад 30 осіб').click();
+  await leadershipSection.getByText('Ні', { exact: true }).click();
 
   const uaSection = page
     .locator('section')
