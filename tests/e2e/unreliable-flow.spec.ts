@@ -99,6 +99,8 @@ test('unreliable flow — warning banner, lie-scale flag, and not-suitable arche
   await completePsychometricAllMax(page);
   await completeAllScenarios(page);
 
+  await page.waitForLoadState('networkidle');
+
   await expect(page.getByText('Попередження щодо якості даних')).toBeVisible();
   await expect(page.getByText(/Шкала брехні/)).toBeVisible();
 

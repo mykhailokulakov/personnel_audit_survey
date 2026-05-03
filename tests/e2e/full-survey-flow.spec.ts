@@ -99,9 +99,11 @@ test('full survey flow — results page, archetype, radar chart, code, and expor
   await completePsychometric(page);
   await completeAllScenarios(page);
 
+  await page.waitForLoadState('networkidle');
+
   await expect(page.getByRole('heading', { name: 'Результати оцінювання' })).toBeVisible();
   await expect(page.getByText('Архетип')).toBeVisible();
-  await expect(page.getByLabel('Радар-діаграма профілю по 6 осях')).toBeVisible();
+  await expect(page.locator('[aria-label="Радар-діаграма профілю по 6 осях"]')).toBeVisible();
   await expect(page.getByText(code)).toBeVisible();
   await expect(page.getByRole('button', { name: /Завантажити результати/ })).toBeVisible();
 });
