@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useShallow } from 'zustand/react/shallow';
 import { useSurveyStore } from '@/lib/storage/survey-store';
 import { scoreSession } from '@/lib/scoring';
 import { ResultsReport } from '@/components/survey/ResultsReport';
@@ -9,14 +10,16 @@ import { BLOCK_ROUTES } from '@/lib/types/blocks';
 
 export default function ResultsPage() {
   const router = useRouter();
-  const session = useSurveyStore((s) => ({
-    code: s.code,
-    startedAt: s.startedAt,
-    currentBlock: s.currentBlock,
-    answers: s.answers,
-    blockStatus: s.blockStatus,
-    consents: s.consents,
-  }));
+  const session = useSurveyStore(
+    useShallow((s) => ({
+      code: s.code,
+      startedAt: s.startedAt,
+      currentBlock: s.currentBlock,
+      answers: s.answers,
+      blockStatus: s.blockStatus,
+      consents: s.consents,
+    })),
+  );
 
   const scenariosCompleted = session.blockStatus.get('scenarios') === 'completed';
 
