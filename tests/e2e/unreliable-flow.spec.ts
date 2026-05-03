@@ -68,7 +68,7 @@ async function completeCognitive(page: Page) {
   await page.waitForURL('/survey/psychometric');
 }
 
-/** Completes psychometric with ALL value 5 (flags lie scale + uniformity → unreliable). */
+/** All value 5 → flags lie scale + uniformity → unreliable. */
 async function completePsychometricAllMax(page: Page) {
   const groups = page.getByRole('radiogroup');
   const count = await groups.count();
@@ -89,7 +89,9 @@ async function completeAllScenarios(page: Page) {
   await page.waitForURL('/survey/results');
 }
 
-test('unreliable flow — validity warnings section is visible', async ({ page }) => {
+test('unreliable flow — warning banner, lie-scale flag, and not-suitable archetype', async ({
+  page,
+}) => {
   await completeIntro(page);
   await completeBasicAndQual(page);
   await skipVerification(page);
@@ -98,15 +100,7 @@ test('unreliable flow — validity warnings section is visible', async ({ page }
   await completeAllScenarios(page);
 
   await expect(page.getByText('Попередження щодо якості даних')).toBeVisible();
-});
-
-test('unreliable flow — archetype is not-suitable or data-unreliable', async ({ page }) => {
-  await completeIntro(page);
-  await completeBasicAndQual(page);
-  await skipVerification(page);
-  await completeCognitive(page);
-  await completePsychometricAllMax(page);
-  await completeAllScenarios(page);
+  await expect(page.getByText(/Шкала брехні/)).toBeVisible();
 
   const archetypeText = await page.locator('[class*="font-bold"]').allTextContents();
   const archetypeValues = ['Не підходить', 'Дані недостовірні'];
@@ -114,15 +108,4 @@ test('unreliable flow — archetype is not-suitable or data-unreliable', async (
     archetypeValues.some((v) => t.includes(v)),
   );
   expect(hasExpectedArchetype).toBe(true);
-});
-
-test('unreliable flow — lie-scale warning appears', async ({ page }) => {
-  await completeIntro(page);
-  await completeBasicAndQual(page);
-  await skipVerification(page);
-  await completeCognitive(page);
-  await completePsychometricAllMax(page);
-  await completeAllScenarios(page);
-
-  await expect(page.getByText(/Шкала брехні/)).toBeVisible();
 });

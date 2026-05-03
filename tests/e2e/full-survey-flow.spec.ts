@@ -69,7 +69,6 @@ async function completeCognitive(page: Page) {
   await page.waitForURL('/survey/psychometric');
 }
 
-/** Completes psychometric by handling attention checks explicitly and varying other values. */
 async function completePsychometricWithAttention(page: Page) {
   const groups = page.getByRole('radiogroup');
   const count = await groups.count();
@@ -79,20 +78,16 @@ async function completePsychometricWithAttention(page: Page) {
     const prompt = await group.locator('p, legend, label').first().textContent();
 
     if (prompt?.includes('Будь ласка, оберіть відповідь «Не згоден» (2)')) {
-      // ac_psych_01: must select value 2 (second radio)
       await group.getByRole('radio').nth(1).click();
     } else if (prompt?.includes('оберіть варіант «Нейтрально» (3)')) {
-      // ac_psych_02: must select value 3 (third radio)
       await group.getByRole('radio').nth(2).click();
     } else if (
       prompt?.includes('ніколи') ||
       prompt?.includes('завжди') ||
       prompt?.includes('ніколи не буває')
     ) {
-      // Likely lie scale — select value 2 (not flagged)
       await group.getByRole('radio').nth(1).click();
     } else {
-      // Regular question — alternate between 4 and 5 to avoid uniformity
       await group
         .getByRole('radio')
         .nth(i % 2 === 0 ? 3 : 4)
@@ -113,40 +108,9 @@ async function completeAllScenarios(page: Page) {
   await page.waitForURL('/survey/results');
 }
 
-test('full survey flow — results page renders after completing all blocks', async ({ page }) => {
-  await completeIntro(page);
-  await completeBasicAndQual(page);
-  await skipVerification(page);
-  await completeCognitive(page);
-  await completePsychometricWithAttention(page);
-  await completeAllScenarios(page);
-
-  await expect(page.getByRole('heading', { name: 'Результати оцінювання' })).toBeVisible();
-});
-
-test('full survey flow — archetype badge is visible', async ({ page }) => {
-  await completeIntro(page);
-  await completeBasicAndQual(page);
-  await skipVerification(page);
-  await completeCognitive(page);
-  await completePsychometricWithAttention(page);
-  await completeAllScenarios(page);
-
-  await expect(page.getByText('Архетип')).toBeVisible();
-});
-
-test('full survey flow — radar chart is rendered', async ({ page }) => {
-  await completeIntro(page);
-  await completeBasicAndQual(page);
-  await skipVerification(page);
-  await completeCognitive(page);
-  await completePsychometricWithAttention(page);
-  await completeAllScenarios(page);
-
-  await expect(page.getByLabel('Радар-діаграма профілю по 6 осях')).toBeVisible();
-});
-
-test('full survey flow — respondent code is shown in header', async ({ page }) => {
+test('full survey flow — results page, archetype, radar chart, code, and export button', async ({
+  page,
+}) => {
   const code = 'e2e_results_001';
   await completeIntro(page, code);
   await completeBasicAndQual(page);
@@ -155,22 +119,14 @@ test('full survey flow — respondent code is shown in header', async ({ page })
   await completePsychometricWithAttention(page);
   await completeAllScenarios(page);
 
+  await expect(page.getByRole('heading', { name: 'Результати оцінювання' })).toBeVisible();
+  await expect(page.getByText('Архетип')).toBeVisible();
+  await expect(page.getByLabel('Радар-діаграма профілю по 6 осях')).toBeVisible();
   await expect(page.getByText(code)).toBeVisible();
-});
-
-test('full survey flow — JSON download button is present', async ({ page }) => {
-  await completeIntro(page);
-  await completeBasicAndQual(page);
-  await skipVerification(page);
-  await completeCognitive(page);
-  await completePsychometricWithAttention(page);
-  await completeAllScenarios(page);
-
   await expect(page.getByRole('button', { name: /Завантажити JSON/ })).toBeVisible();
 });
 
-test('results page — redirects to current block when session not completed', async ({ page }) => {
+test('results page — redirects away when session is not completed', async ({ page }) => {
   await page.goto('/survey/results');
-  // No completed session → should redirect away from results
   await expect(page).not.toHaveURL('/survey/results');
 });

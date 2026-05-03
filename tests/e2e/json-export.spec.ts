@@ -11,7 +11,6 @@ async function completeFullSurvey(page: Page, code = 'e2e_json_001') {
   await page.getByRole('button', { name: 'Розпочати анкету' }).click();
   await page.waitForURL('/survey/basic');
 
-  // Basic info
   await page.getByText('26–35 років').click();
   await page.getByText('Чоловіча').click();
   await page.getByText('м. Київ').click();
@@ -48,11 +47,9 @@ async function completeFullSurvey(page: Page, code = 'e2e_json_001') {
   await page.getByRole('button', { name: 'Далі' }).click();
   await page.waitForURL('/survey/verification');
 
-  // Verification skipped
   await page.getByRole('button', { name: 'Далі' }).click();
   await page.waitForURL('/survey/cognitive');
 
-  // Cognitive
   const cogGroups = page.getByRole('radiogroup');
   const cogCount = await cogGroups.count();
   for (let i = 0; i < cogCount; i++) {
@@ -61,7 +58,6 @@ async function completeFullSurvey(page: Page, code = 'e2e_json_001') {
   await page.getByRole('button', { name: 'Далі' }).click();
   await page.waitForURL('/survey/psychometric');
 
-  // Psychometric (all first radio)
   const psychGroups = page.getByRole('radiogroup');
   const psychCount = await psychGroups.count();
   for (let i = 0; i < psychCount; i++) {
@@ -70,7 +66,6 @@ async function completeFullSurvey(page: Page, code = 'e2e_json_001') {
   await page.getByRole('button', { name: 'Далі' }).click();
   await page.waitForURL('/survey/scenarios');
 
-  // Scenarios (all last radio)
   for (let i = 0; i < 8; i++) {
     await page.getByRole('radio').last().click();
     await page.getByRole('button', { name: /Наступний сценарій/ }).click();
@@ -80,7 +75,7 @@ async function completeFullSurvey(page: Page, code = 'e2e_json_001') {
   await page.waitForURL('/survey/results');
 }
 
-test('json-export — download triggered with .json file', async ({ page }) => {
+test('json-export — filename and valid ScoringResult shape', async ({ page }) => {
   await completeFullSurvey(page);
 
   const [download] = await Promise.all([
@@ -90,26 +85,13 @@ test('json-export — download triggered with .json file', async ({ page }) => {
 
   expect(download.suggestedFilename()).toMatch(/\.json$/);
   expect(download.suggestedFilename()).toContain('e2e_json_001');
-});
-
-test('json-export — downloaded file contains valid JSON with ScoringResult shape', async ({
-  page,
-}) => {
-  await completeFullSurvey(page);
-
-  const [download] = await Promise.all([
-    page.waitForEvent('download'),
-    page.getByRole('button', { name: /Завантажити JSON/ }).click(),
-  ]);
 
   const stream = await download.createReadStream();
   const chunks: Buffer[] = [];
   for await (const chunk of stream) {
     chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
   }
-  const content = Buffer.concat(chunks).toString('utf-8');
-
-  const parsed = JSON.parse(content);
+  const parsed = JSON.parse(Buffer.concat(chunks).toString('utf-8'));
 
   expect(parsed).toHaveProperty('respondentCode', 'e2e_json_001');
   expect(parsed).toHaveProperty('archetype');
