@@ -103,7 +103,7 @@ test('full survey flow — results page, archetype, radar chart, code, and expor
   await expect(page.getByText('Архетип')).toBeVisible();
   await expect(page.locator('[aria-label="Радар-діаграма профілю по 6 осях"]')).toBeVisible();
   await expect(page.getByText(code)).toBeVisible();
-  await expect(page.getByRole('button', { name: /Завантажити результати/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /JSON/ })).toBeVisible();
 });
 
 test('results page — redirects away when session is not completed', async ({ page }) => {

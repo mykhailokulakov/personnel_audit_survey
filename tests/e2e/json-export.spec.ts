@@ -80,7 +80,7 @@ test('json-export — filename and valid ScoringResult shape', async ({ page }) 
 
   const [download] = await Promise.all([
     page.waitForEvent('download'),
-    page.getByRole('button', { name: /Завантажити результати/ }).click(),
+    page.getByRole('button', { name: /JSON/ }).click(),
   ]);
 
   expect(download.suggestedFilename()).toMatch(/\.json$/);

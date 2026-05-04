@@ -45,7 +45,7 @@ export function IntroBlock() {
           key="welcome"
           className="flex flex-col gap-6 opacity-100 transition-opacity duration-200"
         >
-          <h2 className="text-2xl font-semibold">Перш ніж почати</h2>
+          <h1 className="text-2xl font-semibold">Перш ніж почати</h1>
           <p className="text-muted-foreground leading-relaxed">
             Ця анкета допоможе скласти професійний профіль на основі ваших звичок, досвіду та
             підходу до робочих задач. Проходження триватиме приблизно 30-40 хвилин. Будь ласка,
@@ -65,9 +65,11 @@ export function IntroBlock() {
 
       {screen === 'code' && (
         <div key="code" className="flex flex-col gap-6 opacity-100 transition-opacity duration-200">
-          <h2 className="text-2xl font-semibold">Ваш код</h2>
+          <h1 className="text-2xl font-semibold">Ваш код</h1>
           <div className="flex flex-col gap-1.5">
+            <Label htmlFor="code-input">Код учасника</Label>
             <Input
+              id="code-input"
               placeholder="Введіть код"
               value={codeValue}
               onChange={(e) => setCodeValue(e.target.value)}
@@ -99,7 +101,7 @@ export function IntroBlock() {
           key="consents"
           className="flex flex-col gap-6 opacity-100 transition-opacity duration-200"
         >
-          <h2 className="text-2xl font-semibold">Згода на обробку</h2>
+          <h1 className="text-2xl font-semibold">Згода на обробку</h1>
           <div className="flex flex-col gap-4">
             <Label className="flex items-start gap-3 cursor-pointer">
               <Checkbox
