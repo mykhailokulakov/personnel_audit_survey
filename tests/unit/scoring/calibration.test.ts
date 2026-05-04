@@ -152,64 +152,85 @@ describe('AXIS_WEIGHTS sanity', () => {
 // assignArchetype — integration with calibration constants
 // ---------------------------------------------------------------------------
 describe('assignArchetype uses calibration constants correctly', () => {
-  it('returns "potential-leader" when leadership ≥ 70, responsibility ≥ 65, initiative ≥ 60', () => {
+  const {
+    potentialLeader,
+    universalPotential,
+    weakAxis,
+    strongAxis,
+    weakAxisCountForNotSuitable,
+    strongAxisCountForDataUnreliable,
+  } = ARCHETYPE_THRESHOLDS;
+
+  it('returns "potential-leader" when all leader thresholds are exceeded by 2', () => {
     const profile = makeProfile({
-      leadership: 72,
-      responsibility: 67,
-      initiative: 62,
-      technical: 50,
-      learnability: 50,
-      cognitive: 50,
+      leadership: potentialLeader.leadership + 2,
+      responsibility: potentialLeader.responsibility + 2,
+      initiative: potentialLeader.initiative + 2,
+      technical: strongAxis,
+      learnability: strongAxis,
+      cognitive: strongAxis,
     });
     expect(assignArchetype(profile, 'reliable')).toBe('potential-leader');
   });
 
-  it('returns "basic-executor" when all axes are 50 (fails universal-potential minAllAxes=55)', () => {
+  it('returns "basic-executor" when all axes are 1 below universalPotential.minAllAxes', () => {
+    const score = universalPotential.minAllAxes - 1;
     const profile = makeProfile({
-      leadership: 50,
-      responsibility: 50,
-      initiative: 50,
-      technical: 50,
-      learnability: 50,
-      cognitive: 50,
+      leadership: score,
+      responsibility: score,
+      initiative: score,
+      technical: score,
+      learnability: score,
+      cognitive: score,
     });
-    // All scores are 50, which is below universalPotential.minAllAxes (55),
-    // and none of the positive archetype thresholds are met → basic-executor
+    // All scores below minAllAxes → fails universal-potential; no positive archetype met
     expect(assignArchetype(profile, 'reliable')).toBe('basic-executor');
   });
 
-  it('returns "not-suitable" when validity is reliable but ≥ 3 axes are weak (< 35)', () => {
+  it('returns "not-suitable" when validity is reliable and weakAxisCountForNotSuitable axes are below weakAxis', () => {
+    const weakScore = weakAxis - 1;
+    const strongScore = strongAxis + 30;
     const profile = makeProfile({
-      leadership: 30,
-      responsibility: 30,
-      initiative: 30,
-      technical: 80,
-      learnability: 80,
-      cognitive: 80,
+      leadership: weakScore,
+      responsibility: weakScore,
+      initiative: weakAxisCountForNotSuitable === 3 ? weakScore : strongScore,
+      technical: strongScore,
+      learnability: strongScore,
+      cognitive: strongScore,
     });
     expect(assignArchetype(profile, 'reliable')).toBe('not-suitable');
   });
 
-  it('returns "data-unreliable" when validity is unreliable and ≥ 4 axes are strong (≥ 50)', () => {
+  it('returns "data-unreliable" when validity is unreliable and ≥ strongAxisCountForDataUnreliable axes are strong', () => {
+    const strongScore = strongAxis + 10;
+    const weakScore = weakAxis - 1;
+    // Build exactly strongAxisCountForDataUnreliable strong axes, rest weak
+    const scores = [
+      ...Array<number>(strongAxisCountForDataUnreliable).fill(strongScore),
+      ...Array<number>(6 - strongAxisCountForDataUnreliable).fill(weakScore),
+    ];
     const profile = makeProfile({
-      leadership: 60,
-      responsibility: 60,
-      initiative: 60,
-      technical: 60,
-      learnability: 30,
-      cognitive: 30,
+      leadership: scores[0]!,
+      responsibility: scores[1]!,
+      initiative: scores[2]!,
+      technical: scores[3]!,
+      learnability: scores[4]!,
+      cognitive: scores[5]!,
     });
     expect(assignArchetype(profile, 'unreliable')).toBe('data-unreliable');
   });
 
-  it('returns "not-suitable" when validity is unreliable and fewer than 4 strong axes', () => {
+  it('returns "not-suitable" when validity is unreliable and fewer than strongAxisCountForDataUnreliable strong axes', () => {
+    const weakScore = weakAxis - 1;
+    const strongScore = strongAxis + 10;
+    // Only 1 axis above strongAxis → below threshold for data-unreliable
     const profile = makeProfile({
-      leadership: 30,
-      responsibility: 30,
-      initiative: 30,
-      technical: 30,
-      learnability: 30,
-      cognitive: 60,
+      leadership: weakScore,
+      responsibility: weakScore,
+      initiative: weakScore,
+      technical: weakScore,
+      learnability: weakScore,
+      cognitive: strongScore,
     });
     expect(assignArchetype(profile, 'unreliable')).toBe('not-suitable');
   });
@@ -219,22 +240,34 @@ describe('assignArchetype uses calibration constants correctly', () => {
 // computeOverallValidity — integration with calibration constants
 // ---------------------------------------------------------------------------
 describe('computeOverallValidity uses calibration constants correctly', () => {
-  it('returns "unreliable" when lie.score ≥ unreliable threshold (61 ≥ 60)', () => {
-    expect(computeOverallValidity({ score: 61 }, { score: 0 }, { score: 100 }, false)).toBe(
-      'unreliable',
-    );
+  const { lie, consistency, attention } = VALIDITY_THRESHOLDS;
+
+  it('returns "unreliable" when lie.score exceeds unreliable threshold by 1', () => {
+    expect(
+      computeOverallValidity({ score: lie.unreliable + 1 }, { score: 0 }, { score: 100 }, false),
+    ).toBe('unreliable');
   });
 
-  it('returns "unreliable" when consistency.score ≥ unreliable threshold', () => {
-    expect(computeOverallValidity({ score: 0 }, { score: 60 }, { score: 100 }, false)).toBe(
-      'unreliable',
-    );
+  it('returns "unreliable" when consistency.score equals unreliable threshold', () => {
+    expect(
+      computeOverallValidity(
+        { score: 0 },
+        { score: consistency.unreliable },
+        { score: 100 },
+        false,
+      ),
+    ).toBe('unreliable');
   });
 
-  it('returns "unreliable" when attention.score < unreliable threshold (49 < 50)', () => {
-    expect(computeOverallValidity({ score: 0 }, { score: 0 }, { score: 49 }, false)).toBe(
-      'unreliable',
-    );
+  it('returns "unreliable" when attention.score is 1 below unreliable threshold', () => {
+    expect(
+      computeOverallValidity(
+        { score: 0 },
+        { score: 0 },
+        { score: attention.unreliable - 1 },
+        false,
+      ),
+    ).toBe('unreliable');
   });
 
   it('returns "unreliable" when speedFlag is true regardless of other scores', () => {
@@ -243,16 +276,27 @@ describe('computeOverallValidity uses calibration constants correctly', () => {
     );
   });
 
-  it('returns "reliable" when all scores meet reliable thresholds (lie ≤ 30, consistency ≤ 30, attention ≥ 75)', () => {
-    expect(computeOverallValidity({ score: 29 }, { score: 29 }, { score: 76 }, false)).toBe(
-      'reliable',
-    );
+  it('returns "reliable" when all scores are 1 inside their reliable boundaries', () => {
+    expect(
+      computeOverallValidity(
+        { score: lie.reliable - 1 },
+        { score: consistency.reliable - 1 },
+        { score: attention.reliable + 1 },
+        false,
+      ),
+    ).toBe('reliable');
   });
 
-  it('returns "questionable" when scores are between unreliable and reliable thresholds', () => {
-    // lie=40 is > reliable(30) but < unreliable(60), attention=60 is ≥ unreliable(50)
-    expect(computeOverallValidity({ score: 40 }, { score: 0 }, { score: 60 }, false)).toBe(
-      'questionable',
-    );
+  it('returns "questionable" when lie is between reliable and unreliable thresholds', () => {
+    // lie.reliable < midLie < lie.unreliable, attention at exactly unreliable threshold (not below)
+    const midLie = lie.reliable + 1;
+    expect(
+      computeOverallValidity(
+        { score: midLie },
+        { score: 0 },
+        { score: attention.unreliable },
+        false,
+      ),
+    ).toBe('questionable');
   });
 });
