@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useRef } from 'react';
 import {
   RadarChart,
   Radar,
@@ -92,6 +93,28 @@ function downloadJSON(result: ScoringResult) {
   URL.revokeObjectURL(url);
 }
 
+async function exportPdf(containerRef: React.RefObject<HTMLDivElement | null>, code: string) {
+  const element = containerRef.current;
+  if (!element) return;
+  const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+    import('html2canvas'),
+    import('jspdf'),
+  ]);
+  const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const imgWidth = pageWidth - 20;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+  pdf.save(`assessment-${code}.pdf`);
+}
+
+function copyResultLink(code: string) {
+  const url = `${window.location.origin}/results?code=${encodeURIComponent(code)}`;
+  navigator.clipboard.writeText(url).catch(() => {});
+}
+
 /**
  * Renders the full assessment report for a completed respondent session.
  *
@@ -101,6 +124,18 @@ function downloadJSON(result: ScoringResult) {
 export function ResultsReport({ result }: Props) {
   const { archetype, profile, validity, qualifications, respondentCode, scoredAt, durationMs } =
     result;
+
+  const [pdfError, setPdfError] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handlePdfExport = async () => {
+    setPdfError(false);
+    try {
+      await exportPdf(containerRef, respondentCode);
+    } catch {
+      setPdfError(true);
+    }
+  };
 
   const radarData = profile.map(({ axis, score }) => ({
     axis: AxisLabel[axis],
@@ -125,7 +160,7 @@ export function ResultsReport({ result }: Props) {
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <div ref={containerRef} className="flex flex-col gap-8">
       {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold">Результати оцінювання</h1>
@@ -139,16 +174,18 @@ export function ResultsReport({ result }: Props) {
       </div>
 
       {/* Archetype badge */}
-      <div
-        className={`rounded-lg border p-4 ${archetypeColors[archetype] ?? 'bg-gray-100 text-gray-700 border-gray-200'}`}
-      >
-        <p className="text-xs font-semibold uppercase tracking-wide opacity-70">Архетип</p>
-        <p className="mt-1 text-xl font-bold">{ArchetypeLabel[archetype]}</p>
-        <p className="mt-1 text-sm">{ArchetypeDescription[archetype]}</p>
-      </div>
+      <section aria-label="Архетип">
+        <div
+          className={`rounded-lg border p-4 ${archetypeColors[archetype] ?? 'bg-gray-100 text-gray-700 border-gray-200'}`}
+        >
+          <p className="text-xs font-semibold uppercase tracking-wide opacity-70">Архетип</p>
+          <p className="mt-1 text-xl font-bold">{ArchetypeLabel[archetype]}</p>
+          <p className="mt-1 text-sm">{ArchetypeDescription[archetype]}</p>
+        </div>
+      </section>
 
       {/* Radar chart */}
-      <div>
+      <section aria-label="Профіль по осях">
         <h2 className="mb-3 text-lg font-semibold">Профіль по осях</h2>
         <div className="h-72 w-full" aria-label="Радар-діаграма профілю по 6 осях">
           <ResponsiveContainer width="100%" height="100%">
@@ -174,11 +211,11 @@ export function ResultsReport({ result }: Props) {
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
       {/* Qualifications */}
       {declaredQuals.length > 0 && (
-        <div>
+        <section aria-label="Кваліфікації">
           <h2 className="mb-3 text-lg font-semibold">Кваліфікації</h2>
           {result.needsDocumentVerification && (
             <p className="mb-3 text-sm text-muted-foreground">
@@ -190,50 +227,73 @@ export function ResultsReport({ result }: Props) {
               <QualificationBadge key={qual.qualification} qual={qual} />
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* Validity warnings */}
       {hasValidityWarnings && (
-        <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
-          <h2 className="mb-2 text-base font-semibold text-yellow-800">
-            Попередження щодо якості даних
-          </h2>
-          <ul className="flex flex-col gap-1 text-sm text-yellow-700">
-            {validity.overall === 'unreliable' && (
-              <li>
-                Загальна достовірність: <strong>недостовірно</strong>
-              </li>
-            )}
-            {validity.overall === 'questionable' && (
-              <li>
-                Загальна достовірність: <strong>сумнівно</strong>
-              </li>
-            )}
-            {validity.lieScore > 30 && (
-              <li>
-                Шкала брехні: {Math.round(validity.lieScore)}% ({validity.lieCount}/
-                {validity.lieTotal} запитань)
-              </li>
-            )}
-            {validity.consistencyScore > 30 && (
-              <li>Узгодженість відповідей: {Math.round(validity.consistencyScore)}%</li>
-            )}
-            {validity.attentionTotal > 0 && validity.attentionScore < 100 && (
-              <li>
-                Перевірка уважності: {validity.attentionPassed}/{validity.attentionTotal} пройдено
-              </li>
-            )}
-            {validity.speedFlag && <li>Виявлено ознаки поспішного або однорідного заповнення</li>}
-            {qualifications.some((q) => q.likelyFalseFlag) && (
-              <li>Ймовірно неправдиві дані: деякі задекларовані кваліфікації не підтверджені</li>
-            )}
-          </ul>
-        </div>
+        <section aria-label="Попередження щодо якості даних" role="alert">
+          <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
+            <h2 className="mb-2 text-base font-semibold text-yellow-800">
+              Попередження щодо якості даних
+            </h2>
+            <ul className="flex flex-col gap-1 text-sm text-yellow-700">
+              {validity.overall === 'unreliable' && (
+                <li>
+                  Загальна достовірність: <strong>недостовірно</strong>
+                </li>
+              )}
+              {validity.overall === 'questionable' && (
+                <li>
+                  Загальна достовірність: <strong>сумнівно</strong>
+                </li>
+              )}
+              {validity.lieScore > 30 && (
+                <li>
+                  Шкала брехні: {Math.round(validity.lieScore)}% ({validity.lieCount}/
+                  {validity.lieTotal} запитань)
+                </li>
+              )}
+              {validity.consistencyScore > 30 && (
+                <li>Узгодженість відповідей: {Math.round(validity.consistencyScore)}%</li>
+              )}
+              {validity.attentionTotal > 0 && validity.attentionScore < 100 && (
+                <li>
+                  Перевірка уважності: {validity.attentionPassed}/{validity.attentionTotal} пройдено
+                </li>
+              )}
+              {validity.speedFlag && <li>Виявлено ознаки поспішного або однорідного заповнення</li>}
+              {qualifications.some((q) => q.likelyFalseFlag) && (
+                <li>Ймовірно неправдиві дані: деякі задекларовані кваліфікації не підтверджені</li>
+              )}
+            </ul>
+          </div>
+        </section>
       )}
 
-      {/* JSON export */}
-      <div className="flex justify-end">
+      {/* Export actions */}
+      <section aria-label="Дії з результатами" className="flex flex-wrap gap-3 justify-end">
+        {pdfError && (
+          <p role="alert" className="w-full text-right text-sm text-destructive">
+            Помилка при генерації PDF. Спробуйте ще раз.
+          </p>
+        )}
+        <button
+          type="button"
+          onClick={() => copyResultLink(respondentCode)}
+          className="rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+          aria-label="Скопіювати посилання з кодом результату"
+        >
+          Скопіювати посилання
+        </button>
+        <button
+          type="button"
+          onClick={handlePdfExport}
+          className="rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+          aria-label="Завантажити результати у форматі PDF"
+        >
+          Завантажити PDF
+        </button>
         <button
           type="button"
           onClick={() => downloadJSON(result)}
@@ -242,7 +302,7 @@ export function ResultsReport({ result }: Props) {
         >
           Завантажити JSON
         </button>
-      </div>
+      </section>
     </div>
   );
 }

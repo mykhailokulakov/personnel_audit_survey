@@ -29,7 +29,13 @@ export default function ResultsPage() {
     }
   }, [scenariosCompleted, router, session.currentBlock]);
 
-  if (!scenariosCompleted) return null;
+  if (!scenariosCompleted) {
+    return (
+      <main className="flex flex-1 flex-col items-center justify-center gap-4 py-16 text-center">
+        <p className="text-muted-foreground">Будь ласка, почніть з початку</p>
+      </main>
+    );
+  }
 
   const result = scoreSession(session);
 

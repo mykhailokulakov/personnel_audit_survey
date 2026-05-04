@@ -27,17 +27,19 @@ export function SurveyNav({
   };
 
   return (
-    <div className="flex items-center justify-between pt-4">
-      {previousBlockId !== null ? (
-        <Button variant="outline" onClick={handleBack}>
-          Назад
+    <nav aria-label="Навігація анкетою" className="sticky bottom-0 -mx-4 sm:-mx-6 bg-background/95 backdrop-blur-sm border-t border-border px-4 sm:px-6 pb-safe py-3">
+      <div className="flex items-center justify-between">
+        {previousBlockId !== null ? (
+          <Button variant="outline" onClick={handleBack}>
+            Назад
+          </Button>
+        ) : (
+          <span />
+        )}
+        <Button onClick={onNext} disabled={nextDisabled}>
+          {nextLabel}
         </Button>
-      ) : (
-        <span />
-      )}
-      <Button onClick={onNext} disabled={nextDisabled}>
-        {nextLabel}
-      </Button>
-    </div>
+      </div>
+    </nav>
   );
 }
