@@ -108,15 +108,15 @@ async function exportPdf(containerRef: React.RefObject<HTMLDivElement | null>, c
   const pageHeight = pdf.internal.pageSize.getHeight();
   const imgWidth = pageWidth - 20;
   const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  const usableHeight = pageHeight - 20; // 10 mm margin top and bottom
 
-  // Paginate: position the full image progressively higher on each page so
-  // each page renders a different vertical slice of the report.
-  let sliceY = 0;
-  while (sliceY < imgHeight) {
-    if (sliceY > 0) pdf.addPage();
-    pdf.addImage(imgData, 'PNG', 10, 10 - sliceY, imgWidth, imgHeight);
-    sliceY += usableHeight;
+  // Paginate: step by a full page height so adjacent pages share no overlap.
+  // Image is repositioned upward by pageHeight on each subsequent page, and
+  // jsPDF clips any content that falls outside [0, pageHeight].
+  let pageIndex = 0;
+  while (pageIndex * pageHeight < imgHeight + 10) {
+    if (pageIndex > 0) pdf.addPage();
+    pdf.addImage(imgData, 'PNG', 10, 10 - pageIndex * pageHeight, imgWidth, imgHeight);
+    pageIndex++;
   }
 
   pdf.save(`assessment-${code}.pdf`);
@@ -124,7 +124,7 @@ async function exportPdf(containerRef: React.RefObject<HTMLDivElement | null>, c
 
 function copyResultLink(code: string) {
   const url = `${window.location.origin}/results?code=${encodeURIComponent(code)}`;
-  navigator.clipboard.writeText(url).catch(() => {});
+  void (navigator.clipboard as Clipboard | undefined)?.writeText(url).catch(() => {});
 }
 
 /**

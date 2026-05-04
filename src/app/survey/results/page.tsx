@@ -31,9 +31,9 @@ export default function ResultsPage() {
 
   if (!scenariosCompleted) {
     return (
-      <main className="flex flex-1 flex-col items-center justify-center gap-4 py-16 text-center">
+      <div className="flex flex-1 flex-col items-center justify-center gap-4 py-16 text-center">
         <p className="text-muted-foreground">Будь ласка, почніть з початку</p>
-      </main>
+      </div>
     );
   }
 
