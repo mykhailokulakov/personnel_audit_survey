@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import type { ScoringResult, QualificationVerificationResult } from '@/lib/scoring';
 import { ArchetypeLabel, ArchetypeDescription } from '@/lib/scoring';
+import { VALIDITY_THRESHOLDS } from '@/lib/scoring/calibration';
 import { AxisLabel } from '@/lib/types/axes';
 
 type Props = {
@@ -104,9 +105,20 @@ async function exportPdf(containerRef: React.RefObject<HTMLDivElement | null>, c
   const imgData = canvas.toDataURL('image/png');
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
   const imgWidth = pageWidth - 20;
   const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+  const usableHeight = pageHeight - 20; // 10 mm margin top and bottom
+
+  // Paginate: position the full image progressively higher on each page so
+  // each page renders a different vertical slice of the report.
+  let sliceY = 0;
+  while (sliceY < imgHeight) {
+    if (sliceY > 0) pdf.addPage();
+    pdf.addImage(imgData, 'PNG', 10, 10 - sliceY, imgWidth, imgHeight);
+    sliceY += usableHeight;
+  }
+
   pdf.save(`assessment-${code}.pdf`);
 }
 
@@ -248,13 +260,13 @@ export function ResultsReport({ result }: Props) {
                   Загальна достовірність: <strong>сумнівно</strong>
                 </li>
               )}
-              {validity.lieScore > 30 && (
+              {validity.lieScore > VALIDITY_THRESHOLDS.lie.reliable && (
                 <li>
                   Шкала брехні: {Math.round(validity.lieScore)}% ({validity.lieCount}/
                   {validity.lieTotal} запитань)
                 </li>
               )}
-              {validity.consistencyScore > 30 && (
+              {validity.consistencyScore > VALIDITY_THRESHOLDS.consistency.reliable && (
                 <li>Узгодженість відповідей: {Math.round(validity.consistencyScore)}%</li>
               )}
               {validity.attentionTotal > 0 && validity.attentionScore < 100 && (
