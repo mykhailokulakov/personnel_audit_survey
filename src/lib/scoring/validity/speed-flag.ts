@@ -1,4 +1,5 @@
 import type { QuestionId, AnswerRecord } from '../../types/survey';
+import { VALIDITY_THRESHOLDS } from '../calibration';
 
 const PSYCH_QUESTION_IDS: ReadonlyArray<string> = [
   'psych_r01',
@@ -44,11 +45,6 @@ const SJT_QUESTION_IDS: ReadonlyArray<string> = [
   'ac_sjt_02',
 ];
 
-/** Minimum acceptable median response time in milliseconds. */
-const MIN_MEDIAN_MS = 3000;
-
-/** Fraction of identical Likert values that triggers the uniformity flag. */
-const UNIFORMITY_THRESHOLD = 0.8;
 
 function medianOf(values: number[]): number {
   if (values.length === 0) return 0;
@@ -85,14 +81,14 @@ export function computeSpeedFlag(answers: Map<QuestionId, AnswerRecord>): boolea
     if (record.responseTimeMs !== null) responseTimes.push(record.responseTimeMs);
   }
 
-  if (responseTimes.length > 0 && medianOf(responseTimes) < MIN_MEDIAN_MS) return true;
+  if (responseTimes.length > 0 && medianOf(responseTimes) < VALIDITY_THRESHOLDS.speed.minMedianMs) return true;
 
-  if (likertValues.length >= 5) {
+  if (likertValues.length >= VALIDITY_THRESHOLDS.speed.minLikertCount) {
     const valueCounts = new Map<number, number>();
     for (const v of likertValues) valueCounts.set(v, (valueCounts.get(v) ?? 0) + 1);
     const counts = Array.from(valueCounts.values());
     const maxCount = counts.length > 0 ? Math.max(...counts) : 0;
-    if (maxCount / likertValues.length >= UNIFORMITY_THRESHOLD) return true;
+    if (maxCount / likertValues.length >= VALIDITY_THRESHOLDS.speed.uniformityFraction) return true;
   }
 
   return false;
