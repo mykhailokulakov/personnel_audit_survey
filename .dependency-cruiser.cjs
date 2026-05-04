@@ -27,6 +27,12 @@ module.exports = {
           'playwright\\.config\\.',
           'commitlint\\.config\\.',
           '\\.dependency-cruiser\\.',
+          // Intentional stubs/contracts awaiting backend wiring
+          'src/lib/storage/persistence\\.ts$',
+          // UI primitives prepared for future use (shadcn/base-ui components)
+          'src/components/ui/(dialog|select|separator|textarea)\\.tsx$',
+          // Placeholder component for not-yet-implemented survey blocks
+          'src/components/survey/BlockPlaceholder\\.tsx$',
         ],
       },
       to: {},
@@ -74,6 +80,27 @@ module.exports = {
       to: {
         path: '^src/(components|app|hooks)',
       },
+    },
+    {
+      name: 'app-cannot-import-components-internal-files',
+      severity: 'warn',
+      comment: 'App layer should import through stable component entrypoints, not deep internals',
+      from: { path: '^src/app' },
+      to: { path: '^src/components/.+/.+' },
+    },
+    {
+      name: 'components-cannot-import-storage-directly',
+      severity: 'warn',
+      comment: 'State orchestration should live in hooks; UI must not couple to storage directly',
+      from: { path: '^src/components' },
+      to: { path: '^src/lib/storage' },
+    },
+    {
+      name: 'scoring-cannot-import-data',
+      severity: 'error',
+      comment: 'Scoring must remain pure and input-driven; no hidden dataset coupling allowed',
+      from: { path: '^src/lib/scoring' },
+      to: { path: '^src/data' },
     },
   ],
   options: {

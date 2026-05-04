@@ -2,6 +2,7 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import reactHooks from 'eslint-plugin-react-hooks';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 
@@ -28,6 +29,23 @@ const eslintConfig = defineConfig([
     rules: {
       'no-console': ['error', { allow: ['warn', 'error'] }],
       'react-hooks/exhaustive-deps': 'error',
+    },
+  },
+  // Explicit a11y rules for all TSX files (plugin also active via nextVitals)
+  {
+    files: ['**/*.tsx'],
+    plugins: {
+      'jsx-a11y': jsxA11y,
+    },
+    rules: {
+      'jsx-a11y/alt-text': 'error',
+      'jsx-a11y/aria-props': 'error',
+      'jsx-a11y/aria-proptypes': 'error',
+      'jsx-a11y/aria-unsupported-elements': 'error',
+      'jsx-a11y/interactive-supports-focus': 'warn',
+      'jsx-a11y/label-has-associated-control': 'error',
+      'jsx-a11y/no-autofocus': 'warn',
+      'jsx-a11y/role-has-required-aria-props': 'error',
     },
   },
   // TypeScript-specific rules with type information (src only)
