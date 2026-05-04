@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 
-async function completeFullSurvey(page: Page, code = 'e2e_json_001') {
+async function completeFullSurvey(page: Page, code = 'e2e_pdf_001') {
   await page.goto('/survey/intro');
   await page.getByRole('button', { name: 'Далі' }).click();
   await page.getByPlaceholder('Введіть код').fill(code);
@@ -75,30 +75,24 @@ async function completeFullSurvey(page: Page, code = 'e2e_json_001') {
   await page.waitForURL('/survey/results');
 }
 
-test('json-export — filename and valid ScoringResult shape', async ({ page }) => {
-  await completeFullSurvey(page);
+test('pdf-export — downloaded file is non-empty', async ({ page }) => {
+  // html2canvas does not trigger a download event in headless CI
+  test.skip(!!process.env['CI'], 'requires headed browser');
+
+  await completeFullSurvey(page, 'e2e_pdf_001');
 
   const [download] = await Promise.all([
     page.waitForEvent('download'),
-    page.getByRole('button', { name: /JSON/ }).click(),
+    page.getByRole('button', { name: /Завантажити PDF/ }).click(),
   ]);
 
-  expect(download.suggestedFilename()).toMatch(/\.json$/);
-  expect(download.suggestedFilename()).toContain('e2e_json_001');
+  expect(download.suggestedFilename()).toMatch(/\.pdf$/);
+  expect(download.suggestedFilename()).toContain('e2e_pdf_001');
 
-  const stream = await download.createReadStream();
-  const chunks: Buffer[] = [];
-  for await (const chunk of stream) {
-    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-  }
-  const parsed = JSON.parse(Buffer.concat(chunks).toString('utf-8'));
-
-  expect(parsed).toHaveProperty('respondentCode', 'e2e_json_001');
-  expect(parsed).toHaveProperty('archetype');
-  expect(parsed).toHaveProperty('profile');
-  expect(parsed.profile).toHaveLength(6);
-  expect(parsed).toHaveProperty('validity');
-  expect(parsed).toHaveProperty('qualifications');
-  expect(parsed).toHaveProperty('scoredAt');
-  expect(parsed).toHaveProperty('durationMs');
+  // Verify file is non-empty
+  const path = await download.path();
+  expect(path).not.toBeNull();
+  const { readFileSync } = await import('fs');
+  const size = readFileSync(path!).length;
+  expect(size).toBeGreaterThan(0);
 });

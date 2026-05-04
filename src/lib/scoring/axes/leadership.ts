@@ -1,5 +1,6 @@
 import type { QuestionId, AnswerRecord } from '../../types/survey';
 import { getLikertValue, getSjtScore } from './_helpers';
+import { AXIS_WEIGHTS } from '../calibration';
 
 /** Psychometric questions for the leadership axis. */
 const PSYCH_LEADERSHIP: ReadonlyArray<{ id: string; reversed: boolean; weight: number }> = [
@@ -25,7 +26,6 @@ const LARGE_TEAM_OPTIONS = new Set(['team_11_30', 'team_gt30']);
 const MAX_PSYCH = 6 * 5 * 1.0; // 6 questions × max Likert 5 × weight 1.0 = 30
 const MAX_SJT = 4 * 3 * 2.0; // 4 scenarios × max score 3 × weight 2.0 = 24
 const MAX_LEADERSHIP_BASE = MAX_PSYCH + MAX_SJT; // 54
-const LEADERSHIP_BONUS = 5;
 
 /**
  * Scores the leadership axis combining psychometric (Block 4), scenario
@@ -54,5 +54,5 @@ export function scoreLeadership(answers: Map<QuestionId, AnswerRecord>): number 
     teamSizeRecord?.answer.type === 'single-choice' &&
     LARGE_TEAM_OPTIONS.has(teamSizeRecord.answer.optionId);
 
-  return Math.min(100, base + (hasLargeTeam ? LEADERSHIP_BONUS : 0));
+  return Math.min(100, base + (hasLargeTeam ? AXIS_WEIGHTS.leadership.largeTeamBonus : 0));
 }

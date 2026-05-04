@@ -1,4 +1,5 @@
 import type { QuestionId, AnswerRecord } from '../../types/survey';
+import { VALIDITY_THRESHOLDS } from '../calibration';
 
 const LIE_QUESTION_IDS = ['psych_lie01', 'psych_lie02', 'psych_lie03', 'psych_lie04'] as const;
 
@@ -24,7 +25,7 @@ export function computeLieScore(answers: Map<QuestionId, AnswerRecord>): {
     const record = answers.get(qid as QuestionId);
     if (!record || record.answer.type !== 'likert') continue;
     total++;
-    if (record.answer.value >= 4) flaggedCount++;
+    if (record.answer.value >= VALIDITY_THRESHOLDS.lie.flagValue) flaggedCount++;
   }
 
   const score = total === 0 ? 0 : (flaggedCount / total) * 100;

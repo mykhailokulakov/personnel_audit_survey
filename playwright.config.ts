@@ -5,7 +5,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env['CI'],
   retries: process.env['CI'] ? 1 : 0,
-  workers: process.env['CI'] ? 1 : '50%',
+  workers: process.env['CI'] ? 2 : '50%',
   reporter: [['html'], ['github']],
   use: {
     baseURL: process.env['BASE_URL'] ?? 'http://localhost:3000',
@@ -19,7 +19,16 @@ export default defineConfig({
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
+      // skip new specs that only need single-browser coverage
+      testIgnore: ['**/a11y.spec.ts', '**/pdf-export.spec.ts', '**/mobile-viewport.spec.ts'],
     },
+    {
+      name: 'mobile-chrome',
+      use: { ...devices['Pixel 5'] },
+      // only run the mobile-specific viewport tests
+      testMatch: ['**/mobile-viewport.spec.ts'],
+    },
+    // mobile-safari omitted: CI installs chromium+firefox only (no webkit)
   ],
   webServer: {
     command: 'pnpm dev',

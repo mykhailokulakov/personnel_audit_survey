@@ -14,8 +14,8 @@ export function SurveyProgress() {
   const blockLabel = BLOCK_LABELS[currentBlock];
 
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-sm text-muted-foreground">
+    <div role="status" aria-live="polite" className="flex flex-col gap-2">
+      <p className="text-base text-muted-foreground">
         Крок {stepNumber} з {totalSteps}: {blockLabel}
       </p>
       <Progress

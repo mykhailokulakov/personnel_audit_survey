@@ -20,13 +20,21 @@ type LikertScaleProps = {
   value: LikertValue | undefined;
   onChange: (value: LikertValue) => void;
   disabled?: boolean;
+  describedBy?: string;
 };
 
 /**
  * Renders a 5-point Likert scale with horizontal button layout.
  * Supports keyboard navigation via arrow keys and digit keys 1–5.
  */
-export function LikertScale({ id, promptUa, value, onChange, disabled = false }: LikertScaleProps) {
+export function LikertScale({
+  id,
+  promptUa,
+  value,
+  onChange,
+  disabled = false,
+  describedBy,
+}: LikertScaleProps) {
   const groupRef = useRef<HTMLDivElement>(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -59,7 +67,8 @@ export function LikertScale({ id, promptUa, value, onChange, disabled = false }:
         role="radiogroup"
         aria-labelledby={`${id}-label`}
         aria-required="true"
-        tabIndex={value === undefined ? 0 : -1}
+        aria-describedby={describedBy}
+        tabIndex={0}
         onKeyDown={handleKeyDown}
         className="flex flex-wrap gap-2 sm:flex-nowrap"
       >
@@ -77,7 +86,7 @@ export function LikertScale({ id, promptUa, value, onChange, disabled = false }:
               onClick={() => onChange(v)}
               className={cn(
                 'flex flex-1 flex-col items-center gap-1 rounded-md border px-2 py-2 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                'min-w-[56px] cursor-pointer select-none',
+                'min-w-[56px] min-h-[44px] cursor-pointer select-none',
                 isSelected
                   ? 'border-primary bg-primary text-primary-foreground'
                   : 'border-border bg-background text-muted-foreground hover:border-primary/50 hover:bg-accent',

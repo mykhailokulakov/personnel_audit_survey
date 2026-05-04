@@ -1,4 +1,5 @@
 import type { ValidityLevel } from '../types';
+import { VALIDITY_THRESHOLDS } from '../calibration';
 
 /**
  * Derives the overall validity classification from individual metrics.
@@ -14,11 +15,21 @@ export function computeOverallValidity(
   attention: { score: number },
   speedFlag: boolean,
 ): ValidityLevel {
-  if (lie.score >= 60 || consistency.score >= 60 || attention.score < 50 || speedFlag) {
+  if (
+    lie.score >= VALIDITY_THRESHOLDS.lie.unreliable ||
+    consistency.score >= VALIDITY_THRESHOLDS.consistency.unreliable ||
+    attention.score < VALIDITY_THRESHOLDS.attention.unreliable ||
+    speedFlag
+  ) {
     return 'unreliable';
   }
 
-  if (lie.score <= 30 && consistency.score <= 30 && attention.score >= 75 && !speedFlag) {
+  if (
+    lie.score <= VALIDITY_THRESHOLDS.lie.reliable &&
+    consistency.score <= VALIDITY_THRESHOLDS.consistency.reliable &&
+    attention.score >= VALIDITY_THRESHOLDS.attention.reliable &&
+    !speedFlag
+  ) {
     return 'reliable';
   }
 

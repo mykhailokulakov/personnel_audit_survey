@@ -1,15 +1,6 @@
 import type { QuestionId, AnswerRecord } from '../../types/survey';
 import type { QualificationVerificationResult } from '../types';
-
-/** Maximum raw score if all qualifications are declared and fully verified. */
-const MAX_TECHNICAL_RAW = 85; // demining 25 + drones 25 + radar 25 + driving 10
-
-/** Fixed point values for critical qualifications (before verification coefficient). */
-const QUAL_BASE_POINTS: Partial<Record<string, number>> = {
-  demining: 25,
-  'drone-piloting': 25,
-  'radar-radiotech': 25,
-};
+import { TECH_QUALIFICATION_WEIGHTS } from '../calibration';
 
 /** Driving category ids that indicate heavy-vehicle competency (worth full 10 pts). */
 const HEAVY_VEHICLE_CATS = new Set(['cat_C', 'cat_D']);
@@ -26,7 +17,9 @@ export function getDrivingBaseScore(answers: Map<QuestionId, AnswerRecord>): num
   if (!record || record.answer.type !== 'multi-choice') return 0;
   const cats = record.answer.optionIds;
   if (cats.length === 0) return 0;
-  return cats.some((c) => HEAVY_VEHICLE_CATS.has(c)) ? 10 : 7;
+  return cats.some((c) => HEAVY_VEHICLE_CATS.has(c))
+    ? TECH_QUALIFICATION_WEIGHTS.driving.heavy
+    : TECH_QUALIFICATION_WEIGHTS.driving.other;
 }
 
 /**
@@ -45,7 +38,7 @@ export function scoreTechnical(
 
   for (const qual of qualifications) {
     if (!qual.declared) continue;
-    const base = QUAL_BASE_POINTS[qual.qualification];
+    const base = TECH_QUALIFICATION_WEIGHTS.basePoints[qual.qualification];
     if (base !== undefined) {
       rawSum += base * qual.coefficient;
     }
@@ -58,5 +51,5 @@ export function scoreTechnical(
     rawSum += drivingBase * coeff;
   }
 
-  return Math.min(100, Math.round((rawSum / MAX_TECHNICAL_RAW) * 100));
+  return Math.min(100, Math.round((rawSum / TECH_QUALIFICATION_WEIGHTS.maxRaw) * 100));
 }

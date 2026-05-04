@@ -1,5 +1,6 @@
 import type { QuestionId, AnswerRecord, TechQualification } from '../types/survey';
 import type { QualificationVerificationResult, QualificationStatus } from './types';
+import { TECH_QUALIFICATION_WEIGHTS } from './calibration';
 
 /** Verification questions grouped by qualification. */
 const VERIFICATION_QUESTIONS: Record<TechQualification, ReadonlyArray<string>> = {
@@ -55,10 +56,10 @@ function deriveCoefficient(
     return { coefficient: 1.0, likelyFalseFlag: false, status: 'no-verification' };
   }
   const ratio = correctCount / totalCount;
-  if (ratio >= 2 / 3) {
+  if (ratio >= TECH_QUALIFICATION_WEIGHTS.verification.verifiedRatio) {
     return { coefficient: 1.0, likelyFalseFlag: false, status: 'verified' };
   }
-  if (ratio >= 1 / 3) {
+  if (ratio >= TECH_QUALIFICATION_WEIGHTS.verification.partialRatio) {
     return { coefficient: 0.5, likelyFalseFlag: false, status: 'partial' };
   }
   return { coefficient: 0.0, likelyFalseFlag: true, status: 'failed' };
