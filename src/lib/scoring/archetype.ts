@@ -31,7 +31,8 @@ export function assignArchetype(profile: AxisScore[], validity: ValidityLevel): 
   if (validity === 'unreliable') {
     // Distinguish "strong profile tainted by invalid data" from genuinely unfit
     const strongAxesCount = scores.filter((s) => s >= ARCHETYPE_THRESHOLDS.strongAxis).length;
-    if (strongAxesCount >= ARCHETYPE_THRESHOLDS.strongAxisCountForDataUnreliable) return 'data-unreliable';
+    if (strongAxesCount >= ARCHETYPE_THRESHOLDS.strongAxisCountForDataUnreliable)
+      return 'data-unreliable';
     return 'not-suitable';
   }
 

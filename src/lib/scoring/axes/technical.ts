@@ -2,7 +2,6 @@ import type { QuestionId, AnswerRecord } from '../../types/survey';
 import type { QualificationVerificationResult } from '../types';
 import { TECH_QUALIFICATION_WEIGHTS } from '../calibration';
 
-
 /** Driving category ids that indicate heavy-vehicle competency (worth full 10 pts). */
 const HEAVY_VEHICLE_CATS = new Set(['cat_C', 'cat_D']);
 
@@ -18,7 +17,9 @@ export function getDrivingBaseScore(answers: Map<QuestionId, AnswerRecord>): num
   if (!record || record.answer.type !== 'multi-choice') return 0;
   const cats = record.answer.optionIds;
   if (cats.length === 0) return 0;
-  return cats.some((c) => HEAVY_VEHICLE_CATS.has(c)) ? TECH_QUALIFICATION_WEIGHTS.driving.heavy : TECH_QUALIFICATION_WEIGHTS.driving.other;
+  return cats.some((c) => HEAVY_VEHICLE_CATS.has(c))
+    ? TECH_QUALIFICATION_WEIGHTS.driving.heavy
+    : TECH_QUALIFICATION_WEIGHTS.driving.other;
 }
 
 /**

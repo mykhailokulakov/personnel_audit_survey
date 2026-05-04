@@ -45,7 +45,6 @@ const SJT_QUESTION_IDS: ReadonlyArray<string> = [
   'ac_sjt_02',
 ];
 
-
 function medianOf(values: number[]): number {
   if (values.length === 0) return 0;
   const sorted = [...values].sort((a, b) => a - b);
@@ -81,7 +80,8 @@ export function computeSpeedFlag(answers: Map<QuestionId, AnswerRecord>): boolea
     if (record.responseTimeMs !== null) responseTimes.push(record.responseTimeMs);
   }
 
-  if (responseTimes.length > 0 && medianOf(responseTimes) < VALIDITY_THRESHOLDS.speed.minMedianMs) return true;
+  if (responseTimes.length > 0 && medianOf(responseTimes) < VALIDITY_THRESHOLDS.speed.minMedianMs)
+    return true;
 
   if (likertValues.length >= VALIDITY_THRESHOLDS.speed.minLikertCount) {
     const valueCounts = new Map<number, number>();

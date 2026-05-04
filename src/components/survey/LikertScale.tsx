@@ -27,7 +27,14 @@ type LikertScaleProps = {
  * Renders a 5-point Likert scale with horizontal button layout.
  * Supports keyboard navigation via arrow keys and digit keys 1–5.
  */
-export function LikertScale({ id, promptUa, value, onChange, disabled = false, describedBy }: LikertScaleProps) {
+export function LikertScale({
+  id,
+  promptUa,
+  value,
+  onChange,
+  disabled = false,
+  describedBy,
+}: LikertScaleProps) {
   const groupRef = useRef<HTMLDivElement>(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {

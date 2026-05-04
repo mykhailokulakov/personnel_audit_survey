@@ -50,11 +50,11 @@ pnpm validate         # run all checks + coverage gate
 
 ## Documentation
 
-| Document | Description |
-| -------- | ----------- |
-| [User Guide](docs/USER_GUIDE.md) | How to conduct assessments and interpret results (Ukrainian) |
-| [Calibration Guide](docs/CALIBRATION_GUIDE.md) | How to tune scoring thresholds and add questions |
-| [PRD](docs/PRD.md) | Product Requirements Document |
+| Document                                       | Description                                                  |
+| ---------------------------------------------- | ------------------------------------------------------------ |
+| [User Guide](docs/USER_GUIDE.md)               | How to conduct assessments and interpret results (Ukrainian) |
+| [Calibration Guide](docs/CALIBRATION_GUIDE.md) | How to tune scoring thresholds and add questions             |
+| [PRD](docs/PRD.md)                             | Product Requirements Document                                |
 
 ## Project structure
 
@@ -123,15 +123,15 @@ All must pass before merge:
 
 ## Roadmap
 
-| Milestone | Description                                                     | Status  |
-| --------- | --------------------------------------------------------------- | ------- |
-| M0        | Bootstrap — Next.js 16, quality automation, CI/CD               | ✅ Done |
-| M1        | Survey engine — question flow, branching logic                  | ✅ Done |
-| M2        | Scoring module — profile calculation                            | ✅ Done |
-| M3        | Results page — visualization, export                            | ✅ Done |
-| M4        | Quality & CI                                                    | ✅ Done |
-| M5        | Data integrity & exports                                        | ✅ Done |
-| M6        | Polish — a11y, mobile, PDF export, calibration                  | ✅ Done |
+| Milestone | Description                                       | Status  |
+| --------- | ------------------------------------------------- | ------- |
+| M0        | Bootstrap — Next.js 16, quality automation, CI/CD | ✅ Done |
+| M1        | Survey engine — question flow, branching logic    | ✅ Done |
+| M2        | Scoring module — profile calculation              | ✅ Done |
+| M3        | Results page — visualization, export              | ✅ Done |
+| M4        | Quality & CI                                      | ✅ Done |
+| M5        | Data integrity & exports                          | ✅ Done |
+| M6        | Polish — a11y, mobile, PDF export, calibration    | ✅ Done |
 
 ## Known Limitations
 
