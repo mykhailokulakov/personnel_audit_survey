@@ -48,6 +48,14 @@ pnpm deps:check       # architecture rules check
 pnpm validate         # run all checks + coverage gate
 ```
 
+## Documentation
+
+| Document | Description |
+| -------- | ----------- |
+| [User Guide](docs/USER_GUIDE.md) | How to conduct assessments and interpret results (Ukrainian) |
+| [Calibration Guide](docs/CALIBRATION_GUIDE.md) | How to tune scoring thresholds and add questions |
+| [PRD](docs/PRD.md) | Product Requirements Document |
+
 ## Project structure
 
 ```
@@ -115,15 +123,22 @@ All must pass before merge:
 
 ## Roadmap
 
-| Milestone | Description                                       | Status  |
-| --------- | ------------------------------------------------- | ------- |
-| M0        | Bootstrap — Next.js 16, quality automation, CI/CD | ✅ Done |
-| M1        | Survey engine — question flow, branching logic    | Planned |
-| M2        | Scoring module — profile calculation              | Planned |
-| M3        | Results page — visualization, export              | Planned |
-| M4        | Admin panel — question management                 | Planned |
-| M5        | Analytics dashboard                               | Planned |
-| M6        | Multi-language support                            | Planned |
+| Milestone | Description                                                     | Status  |
+| --------- | --------------------------------------------------------------- | ------- |
+| M0        | Bootstrap — Next.js 16, quality automation, CI/CD               | ✅ Done |
+| M1        | Survey engine — question flow, branching logic                  | ✅ Done |
+| M2        | Scoring module — profile calculation                            | ✅ Done |
+| M3        | Results page — visualization, export                            | ✅ Done |
+| M4        | Quality & CI                                                    | ✅ Done |
+| M5        | Data integrity & exports                                        | ✅ Done |
+| M6        | Polish — a11y, mobile, PDF export, calibration                  | ✅ Done |
+
+## Known Limitations
+
+- No backend — results exist only in browser memory. Download JSON before closing the tab.
+- The "Copy link" feature is a stub — shared links require a backend to be implemented.
+- Archetype thresholds are empirically set. Recalibration on real data is recommended after pilot use.
+- PDF export uses client-side rendering (html2canvas). Complex charts may render differently than on screen.
 
 ## Privacy & Data
 
