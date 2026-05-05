@@ -25,6 +25,9 @@ const eslintConfig = defineConfig([
     plugins: {
       'react-hooks': reactHooks,
     },
+    settings: {
+      react: { version: '19.2.5' },
+    },
     rules: {
       'no-console': ['error', { allow: ['warn', 'error'] }],
       'react-hooks/exhaustive-deps': 'error',
