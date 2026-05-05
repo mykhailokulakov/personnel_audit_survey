@@ -40,6 +40,11 @@
     "zod": "^4.3.6",
     "zustand": "^5.0.12"
   },
+  "pnpm": {
+    "overrides": {
+      "postcss": ">=8.5.10"
+    }
+  },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
     "@commitlint/cli": "^20.5.2",
@@ -59,6 +64,7 @@
     "dependency-cruiser": "^17.3.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^7.1.1",
     "husky": "^9.1.7",
     "jsdom": "^29.1.0",

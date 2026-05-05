@@ -30,6 +30,27 @@ const eslintConfig = defineConfig([
       'react-hooks/exhaustive-deps': 'error',
     },
   },
+  // Explicit a11y rules for all TSX files; jsx-a11y plugin is registered by nextVitals
+  {
+    files: ['**/*.tsx'],
+    rules: {
+      'jsx-a11y/alt-text': 'error',
+      'jsx-a11y/aria-props': 'error',
+      'jsx-a11y/aria-proptypes': 'error',
+      'jsx-a11y/aria-unsupported-elements': 'error',
+      'jsx-a11y/interactive-supports-focus': 'warn',
+      'jsx-a11y/label-has-associated-control': [
+        'error',
+        {
+          labelComponents: ['Label'],
+          controlComponents: ['RadioGroupItem', 'Checkbox', 'Input', 'Textarea', 'Select'],
+          depth: 3,
+        },
+      ],
+      'jsx-a11y/no-autofocus': 'warn',
+      'jsx-a11y/role-has-required-aria-props': 'error',
+    },
+  },
   // TypeScript-specific rules with type information (src only)
   {
     files: ['src/**/*.{ts,tsx}'],
