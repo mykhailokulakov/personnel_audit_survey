@@ -39,11 +39,14 @@ const eslintConfig = defineConfig([
       'jsx-a11y/aria-proptypes': 'error',
       'jsx-a11y/aria-unsupported-elements': 'error',
       'jsx-a11y/interactive-supports-focus': 'warn',
-      'jsx-a11y/label-has-associated-control': ['error', {
-        labelComponents: ['Label'],
-        controlComponents: ['RadioGroupItem', 'Checkbox', 'Input', 'Textarea', 'Select'],
-        depth: 3,
-      }],
+      'jsx-a11y/label-has-associated-control': [
+        'error',
+        {
+          labelComponents: ['Label'],
+          controlComponents: ['RadioGroupItem', 'Checkbox', 'Input', 'Textarea', 'Select'],
+          depth: 3,
+        },
+      ],
       'jsx-a11y/no-autofocus': 'warn',
       'jsx-a11y/role-has-required-aria-props': 'error',
     },
