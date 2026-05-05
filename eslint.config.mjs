@@ -2,7 +2,6 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import reactHooks from 'eslint-plugin-react-hooks';
-import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 
 const eslintConfig = defineConfig([
@@ -19,7 +18,13 @@ const eslintConfig = defineConfig([
     '*.cjs',
     '*.mjs',
     'commitlint.config.js',
+    '*.config.ts',
   ]),
+  {
+    settings: {
+      react: { version: '19.2.5' },
+    },
+  },
   // Rules for all linted files
   {
     plugins: {
@@ -54,9 +59,6 @@ const eslintConfig = defineConfig([
   // TypeScript-specific rules with type information (src only)
   {
     files: ['src/**/*.{ts,tsx}'],
-    plugins: {
-      '@typescript-eslint': tseslint,
-    },
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -76,9 +78,6 @@ const eslintConfig = defineConfig([
   {
     files: ['**/*.ts', '**/*.tsx'],
     ignores: ['src/**'],
-    plugins: {
-      '@typescript-eslint': tseslint,
-    },
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
