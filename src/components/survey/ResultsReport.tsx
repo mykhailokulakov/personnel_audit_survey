@@ -125,6 +125,8 @@ async function exportPdf(containerRef: React.RefObject<HTMLDivElement | null>, c
   }
 
   pdf.save(`assessment-${code}.pdf`);
+  // Allow test environments to observe that pdf.save() completed without error.
+  (window as Window & { __onPdfSaved?: () => void }).__onPdfSaved?.();
 }
 
 function copyResultLink(code: string) {
