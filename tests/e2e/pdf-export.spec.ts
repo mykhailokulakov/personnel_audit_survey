@@ -108,7 +108,7 @@ test('pdf-export — pdf.save() completes without error', async ({ page }) => {
   test.setTimeout(120_000);
 
   await completeFullSurvey(page, 'e2e_pdf_001');
-  await page.getByRole('button', { name: /Завантажити PDF/ }).click();
+  await page.getByRole('button', { name: /PDF/ }).click();
 
   // Wait for production code to call __onPdfSaved after pdf.save() completes.
   await page.waitForFunction(() => (window as any).__pdfSaved === true, { timeout: 15_000 });
