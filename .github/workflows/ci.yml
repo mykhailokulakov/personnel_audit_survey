@@ -187,5 +187,6 @@ jobs:
           VERSION="${{ steps.version.outputs.new_version }}"
           gh release create "v${VERSION}" \
             --title "v${VERSION}" \
+            --target "$GITHUB_SHA" \
             --notes-file release-notes.md \
             "diagnostic-survey-v${VERSION}.tar.gz#Standalone app (Node.js)"

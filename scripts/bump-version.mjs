@@ -3,13 +3,13 @@
  * writes release notes to release-notes.md, and sets GITHUB_OUTPUT variables.
  *
  * Bump rules (highest wins):
- *   major — commit message matches /BREAKING.CHANGE/ or /^type(!):/ pattern
+ *   major — BREAKING CHANGE anywhere in commit body/footer, or "type!:" subject
  *   minor — commit starts with "feat:"
  *   patch — everything else (default)
  */
 
 import { execSync } from 'child_process';
-import { readFileSync, appendFileSync, writeFileSync } from 'fs';
+import { appendFileSync, readFileSync, writeFileSync } from 'fs';
 
 // ── 1. Find the latest git tag ────────────────────────────────────────────────
 
@@ -24,32 +24,41 @@ try {
   // No tags exist yet — this will be the first release.
 }
 
-// ── 2. Collect commit messages since that tag ─────────────────────────────────
+// ── 2. Collect commits since that tag ────────────────────────────────────────
 
 const range = latestTag ? `${latestTag}..HEAD` : 'HEAD';
-let commitMessages = [];
+
+// Subject lines for the changelog and conventional-commit type detection.
+let subjects = [];
 try {
   const raw = execSync(`git log ${range} --pretty=format:"%s"`, {
     stdio: ['pipe', 'pipe', 'pipe'],
   })
     .toString()
     .trim();
-  commitMessages = raw ? raw.split('\n').filter(Boolean) : [];
+  subjects = raw ? raw.split('\n').filter(Boolean) : [];
 } catch {
   // Empty repo / no commits in range.
+}
+
+// Full commit bodies (subject + body + trailers) for BREAKING CHANGE detection.
+let fullBodies = '';
+try {
+  fullBodies = execSync(`git log ${range} --pretty=format:"%B"`, {
+    stdio: ['pipe', 'pipe', 'pipe'],
+  }).toString();
+} catch {
+  // No commits.
 }
 
 // ── 3. Determine bump type ────────────────────────────────────────────────────
 
 let bump = 'patch';
-for (const msg of commitMessages) {
-  if (/BREAKING.CHANGE/.test(msg) || /^[a-z]+(\(.+\))?!:/.test(msg)) {
-    bump = 'major';
-    break;
-  }
-  if (/^feat(\(.+\))?:/.test(msg) && bump !== 'major') {
-    bump = 'minor';
-  }
+
+if (/BREAKING.CHANGE/.test(fullBodies) || subjects.some((s) => /^[a-z]+(\(.+\))?!:/.test(s))) {
+  bump = 'major';
+} else if (subjects.some((s) => /^feat(\(.+\))?:/.test(s))) {
+  bump = 'minor';
 }
 
 // ── 4. Compute new version ────────────────────────────────────────────────────
@@ -69,9 +78,7 @@ const newVersion =
 // ── 5. Build changelog section ────────────────────────────────────────────────
 
 const changelogEntries =
-  commitMessages.length > 0
-    ? commitMessages.map((m) => `- ${m}`).join('\n')
-    : '- No changes recorded';
+  subjects.length > 0 ? subjects.map((m) => `- ${m}`).join('\n') : '- No changes recorded';
 
 const compareUrl = latestTag
   ? `https://github.com/mykhailokulakov/generic_llm_experiments/compare/${latestTag}...v${newVersion}`
@@ -117,7 +124,5 @@ if (outputFile) {
   appendFileSync(outputFile, `bump_type=${bump}\n`);
 }
 
-console.log(`Version: ${baseVersion} → ${newVersion} (${bump} bump)`);
-console.log(
-  `Commits since ${latestTag ?? 'beginning'}: ${commitMessages.length}`,
-);
+console.warn(`Version: ${baseVersion} → ${newVersion} (${bump} bump)`);
+console.warn(`Commits since ${latestTag ?? 'beginning'}: ${subjects.length}`);
