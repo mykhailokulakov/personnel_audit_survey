@@ -76,13 +76,13 @@ async function completeFullSurvey(page: Page, code = 'e2e_pdf_001') {
 }
 
 test('pdf-export — downloaded file is non-empty', async ({ page }) => {
-  // html2canvas does not trigger a download event in headless CI
-  test.skip(!!process.env['CI'], 'requires headed browser');
+  // Allow extra time for html2canvas to render the full results DOM.
+  test.setTimeout(60_000);
 
   await completeFullSurvey(page, 'e2e_pdf_001');
 
   const [download] = await Promise.all([
-    page.waitForEvent('download'),
+    page.waitForEvent('download', { timeout: 30_000 }),
     page.getByRole('button', { name: /Завантажити PDF/ }).click(),
   ]);
 
