@@ -101,7 +101,7 @@ async function exportPdf(containerRef: React.RefObject<HTMLDivElement | null>, c
     import('html2canvas'),
     import('jspdf'),
   ]);
-  const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+  const canvas = await html2canvas(element, { scale: 2, useCORS: true, logging: false });
   const imgData = canvas.toDataURL('image/png');
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const pageWidth = pdf.internal.pageSize.getWidth();

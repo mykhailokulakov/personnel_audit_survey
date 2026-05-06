@@ -76,13 +76,14 @@ async function completeFullSurvey(page: Page, code = 'e2e_pdf_001') {
 }
 
 test('pdf-export — downloaded file is non-empty', async ({ page }) => {
-  // Allow extra time for html2canvas to render the full results DOM.
-  test.setTimeout(60_000);
+  // Allow extra time: survey navigation (~35 s) + html2canvas on a chart-heavy
+  // results page (~40 s) comfortably fits in 3 minutes in CI headless mode.
+  test.setTimeout(180_000);
 
   await completeFullSurvey(page, 'e2e_pdf_001');
 
   const [download] = await Promise.all([
-    page.waitForEvent('download', { timeout: 30_000 }),
+    page.waitForEvent('download', { timeout: 90_000 }),
     page.getByRole('button', { name: /Завантажити PDF/ }).click(),
   ]);
 
