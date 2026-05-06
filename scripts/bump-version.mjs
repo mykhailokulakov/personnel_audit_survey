@@ -118,11 +118,20 @@ writeFileSync('release-notes.md', `${changelogSection}\n\n${runSection}\n`);
 
 // ── 8. Set GitHub Actions outputs ─────────────────────────────────────────────
 
+// Skip if there are no new commits since the last tag — avoids minting a
+// bogus patch release when CI is rerun on an already-released commit.
+const skip = latestTag !== null && subjects.length === 0;
+
 const outputFile = process.env.GITHUB_OUTPUT;
 if (outputFile) {
   appendFileSync(outputFile, `new_version=${newVersion}\n`);
   appendFileSync(outputFile, `bump_type=${bump}\n`);
+  appendFileSync(outputFile, `skip=${String(skip)}\n`);
 }
 
-console.warn(`Version: ${baseVersion} → ${newVersion} (${bump} bump)`);
-console.warn(`Commits since ${latestTag ?? 'beginning'}: ${subjects.length}`);
+if (skip) {
+  console.warn(`No new commits since ${latestTag} — skipping release.`);
+} else {
+  console.warn(`Version: ${baseVersion} → ${newVersion} (${bump} bump)`);
+  console.warn(`Commits since ${latestTag ?? 'beginning'}: ${subjects.length}`);
+}

@@ -168,9 +168,11 @@ jobs:
         run: node scripts/bump-version.mjs
 
       - name: Build standalone
+        if: steps.version.outputs.skip != 'true'
         run: pnpm build
 
       - name: Package artifact
+        if: steps.version.outputs.skip != 'true'
         run: |
           VERSION="${{ steps.version.outputs.new_version }}"
           DIR="diagnostic-survey-v${VERSION}"
@@ -181,6 +183,7 @@ jobs:
           tar czf "diagnostic-survey-v${VERSION}.tar.gz" "$DIR"
 
       - name: Create GitHub release
+        if: steps.version.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
