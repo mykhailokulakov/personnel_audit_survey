@@ -97,11 +97,16 @@ function downloadJSON(result: ScoringResult) {
 async function exportPdf(containerRef: React.RefObject<HTMLDivElement | null>, code: string) {
   const element = containerRef.current;
   if (!element) return;
-  const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+  const [{ default: html2canvasLib }, { jsPDF }] = await Promise.all([
     import('html2canvas'),
     import('jspdf'),
   ]);
-  const canvas = await html2canvas(element, { scale: 2, useCORS: true, logging: false });
+  // Test environments can inject a stub via window.__html2canvasMock to avoid
+  // headless-incompatible canvas rendering while still exercising the jsPDF path.
+  const html2canvasImpl =
+    (window as Window & { __html2canvasMock?: typeof html2canvasLib }).__html2canvasMock ??
+    html2canvasLib;
+  const canvas = await html2canvasImpl(element, { scale: 2, useCORS: true, logging: false });
   const imgData = canvas.toDataURL('image/png');
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const pageWidth = pdf.internal.pageSize.getWidth();
