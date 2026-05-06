@@ -140,3 +140,58 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+
+  release:
+    name: Release
+    needs: [typecheck, lint, architecture, test-unit, test-e2e]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Compute next version and release notes
+        id: version
+        run: node scripts/bump-version.mjs
+
+      - name: Build standalone
+        if: steps.version.outputs.skip != 'true'
+        env:
+          NEXT_STANDALONE: 'true'
+        run: pnpm build
+
+      - name: Package artifact
+        if: steps.version.outputs.skip != 'true'
+        run: |
+          VERSION="${{ steps.version.outputs.new_version }}"
+          DIR="diagnostic-survey-v${VERSION}"
+          cp -r .next/standalone "$DIR"
+          mkdir -p "$DIR/.next"
+          cp -r .next/static "$DIR/.next/static"
+          cp -r public "$DIR/public"
+          tar czf "diagnostic-survey-v${VERSION}.tar.gz" "$DIR"
+
+      - name: Create GitHub release
+        if: steps.version.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.version.outputs.new_version }}"
+          gh release create "v${VERSION}" \
+            --title "v${VERSION}" \
+            --target "$GITHUB_SHA" \
+            --notes-file release-notes.md \
+            "diagnostic-survey-v${VERSION}.tar.gz#Standalone app (Node.js)"

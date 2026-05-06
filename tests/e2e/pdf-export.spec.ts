@@ -75,24 +75,43 @@ async function completeFullSurvey(page: Page, code = 'e2e_pdf_001') {
   await page.waitForURL('/survey/results');
 }
 
-test('pdf-export — downloaded file is non-empty', async ({ page }) => {
-  // html2canvas does not trigger a download event in headless CI
-  test.skip(!!process.env['CI'], 'requires headed browser');
+test('pdf-export — pdf.save() completes without error', async ({ page }) => {
+  // html2canvas cannot reliably render complex SVG charts in headless Chromium.
+  // Inject a stub via window.__html2canvasMock so the test covers the full
+  // jsPDF generation path without depending on canvas rendering.
+  // The production code checks for __html2canvasMock before using the real lib.
+  // __onPdfSaved is called by production code after pdf.save() completes,
+  // allowing the test to verify the full export path without depending on
+  // jsPDF's headless download mechanism (which uses an untrusted synthetic click).
+  await page.addInitScript(() => {
+    (window as any).__html2canvasMock = async () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 595;
+      canvas.height = 842;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#000000';
+        ctx.font = '14px sans-serif';
+        ctx.fillText('CI test — pdf-export', 20, 40);
+      }
+      return canvas;
+    };
+    (window as any).__pdfSaved = false;
+    (window as any).__onPdfSaved = () => {
+      (window as any).__pdfSaved = true;
+    };
+  });
+
+  // Survey navigation: ~35 s in CI. With the mock, the export itself is instant.
+  test.setTimeout(120_000);
 
   await completeFullSurvey(page, 'e2e_pdf_001');
+  await page.getByRole('button', { name: /PDF/ }).click();
 
-  const [download] = await Promise.all([
-    page.waitForEvent('download'),
-    page.getByRole('button', { name: /Завантажити PDF/ }).click(),
-  ]);
+  // Wait for production code to call __onPdfSaved after pdf.save() completes.
+  await page.waitForFunction(() => (window as any).__pdfSaved === true, { timeout: 15_000 });
 
-  expect(download.suggestedFilename()).toMatch(/\.pdf$/);
-  expect(download.suggestedFilename()).toContain('e2e_pdf_001');
-
-  // Verify file is non-empty
-  const path = await download.path();
-  expect(path).not.toBeNull();
-  const { readFileSync } = await import('fs');
-  const size = readFileSync(path!).length;
-  expect(size).toBeGreaterThan(0);
+  await expect(page.getByText('Помилка при генерації PDF')).not.toBeVisible();
 });

@@ -1,8 +1,8 @@
 # Diagnostic Survey
 
-Інтерактивна діагностична анкета для оцінки профілю респондентів.
+An interactive diagnostic survey for assessing respondent profiles.
 
-Частина репозиторію `generic_llm_experiments` — дослідний проєкт для вивчення можливостей LLM у розробці продуктів.
+Part of the `generic_llm_experiments` repository — a research project for exploring LLM capabilities in product development.
 
 ## Stack
 
@@ -98,9 +98,9 @@ All must pass before merge:
 | Dependency review                     | no high severity                 |
 | Claude PR Review                      | LGTM (non-blocking but required) |
 
-## Branch protection (налаштувати вручну)
+## Branch protection (configure manually)
 
-Після push до GitHub: **Settings → Rules → Rulesets** → створити ruleset для гілки `main`:
+After pushing to GitHub: **Settings → Rules → Rulesets** → create a ruleset for the `main` branch:
 
 - **Require pull request before merging**
   - Required approvals: 1
@@ -112,13 +112,13 @@ All must pass before merge:
   - `test-unit`
   - `test-e2e`
   - `build`
-  - `Claude PR Review` _(після налаштування Claude App)_
+  - `Claude PR Review` _(after configuring Claude App)_
   - `CodeQL`
   - `Dependency Review`
 - **Require branches to be up to date before merging**: ✓
 - **Require conversation resolution before merging**: ✓
 - **Require linear history**: ✓
-- **Restrict pushes that create matching refs** (тільки через PR): ✓
+- **Restrict pushes that create matching refs** (only via PR): ✓
 - **Do not allow bypassing the above settings**: ✓
 
 ## Roadmap
@@ -142,7 +142,7 @@ All must pass before merge:
 
 ## Privacy & Data
 
-- **Анонімні коди**: ніякого ПІБ, тільки анонімні ідентифікатори респондентів
-- **Дані тільки в пам'яті**: жодного `localStorage`, `sessionStorage` або бази даних на клієнті
-- **Не логувати**: коди респондентів не виводяться в plain text у логах
-- **Валідація**: всі вхідні дані валідуються і на клієнті, і на сервері (коли з'явиться backend)
+- **Anonymous codes**: no full names — only anonymous respondent identifiers
+- **Memory only**: no `localStorage`, `sessionStorage`, or client-side database
+- **No logging**: respondent codes are never printed in plain text in logs
+- **Validation**: all inputs are validated on both client and server (when backend is added)
