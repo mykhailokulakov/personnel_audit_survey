@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { statSync } from 'fs';
 
 async function completeFullSurvey(page: Page, code = 'e2e_pdf_001') {
   await page.goto('/survey/intro');
@@ -78,7 +79,7 @@ async function completeFullSurvey(page: Page, code = 'e2e_pdf_001') {
 test('pdf-export — downloaded file is non-empty', async ({ page }) => {
   // html2canvas cannot reliably render complex SVG charts in headless Chromium.
   // Inject a stub via window.__html2canvasMock so the test covers the full
-  // jsPDF generation and blob-creation path without depending on canvas rendering.
+  // jsPDF generation path without depending on canvas rendering.
   // The production code checks for __html2canvasMock before using the real lib.
   await page.addInitScript(() => {
     (window as any).__html2canvasMock = async () => {
@@ -95,29 +96,20 @@ test('pdf-export — downloaded file is non-empty', async ({ page }) => {
       }
       return canvas;
     };
-
-    // Intercept URL.createObjectURL to capture the PDF blob size.
-    const orig = URL.createObjectURL.bind(URL);
-    URL.createObjectURL = (obj: any) => {
-      const url = orig(obj);
-      if (obj instanceof Blob && obj.type === 'application/pdf') {
-        (window as any).__pdfBlobSize = obj.size;
-      }
-      return url;
-    };
   });
 
   // Survey navigation: ~35 s in CI. With the mock, the export itself is instant.
   test.setTimeout(120_000);
 
   await completeFullSurvey(page, 'e2e_pdf_001');
+
+  // Set up download listener before clicking to avoid race condition.
+  const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: /Завантажити PDF/ }).click();
+  const download = await downloadPromise;
 
-  // Wait for jsPDF to call URL.createObjectURL with the PDF blob.
-  await page.waitForFunction(() => (window as any).__pdfBlobSize !== undefined, {
-    timeout: 15_000,
-  });
-
-  const pdfBlobSize = await page.evaluate(() => (window as any).__pdfBlobSize as number);
-  expect(pdfBlobSize).toBeGreaterThan(0);
+  // Verify the downloaded file exists and has content.
+  const filePath = await download.path();
+  if (!filePath) throw new Error('Download path is null — download may have failed');
+  expect(statSync(filePath).size).toBeGreaterThan(0);
 });
