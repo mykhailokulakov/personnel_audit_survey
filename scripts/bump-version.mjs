@@ -55,7 +55,10 @@ try {
 
 let bump = 'patch';
 
-if (/^BREAKING[ -]CHANGE:/m.test(fullBodies) || subjects.some((s) => /^[a-z]+(\(.+\))?!:/.test(s))) {
+if (
+  /^BREAKING[ -]CHANGE:/m.test(fullBodies) ||
+  subjects.some((s) => /^[a-z]+(\(.+\))?!:/.test(s))
+) {
   bump = 'major';
 } else if (subjects.some((s) => /^feat(\(.+\))?:/.test(s))) {
   bump = 'minor';
