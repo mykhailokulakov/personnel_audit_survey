@@ -8,14 +8,14 @@
  *   patch — everything else (default)
  */
 
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import { appendFileSync, readFileSync, writeFileSync } from 'fs';
 
 // ── 1. Find the latest git tag ────────────────────────────────────────────────
 
 let latestTag = null;
 try {
-  latestTag = execSync('git describe --tags --abbrev=0', {
+  latestTag = execFileSync('git', ['describe', '--tags', '--abbrev=0'], {
     stdio: ['pipe', 'pipe', 'pipe'],
   })
     .toString()
@@ -31,7 +31,7 @@ const range = latestTag ? `${latestTag}..HEAD` : 'HEAD';
 // Subject lines for the changelog and conventional-commit type detection.
 let subjects = [];
 try {
-  const raw = execSync(`git log ${range} --pretty=format:"%s"`, {
+  const raw = execFileSync('git', ['log', range, '--pretty=format:%s'], {
     stdio: ['pipe', 'pipe', 'pipe'],
   })
     .toString()
@@ -44,7 +44,7 @@ try {
 // Full commit bodies (subject + body + trailers) for BREAKING CHANGE detection.
 let fullBodies = '';
 try {
-  fullBodies = execSync(`git log ${range} --pretty=format:"%B"`, {
+  fullBodies = execFileSync('git', ['log', range, '--pretty=format:%B'], {
     stdio: ['pipe', 'pipe', 'pipe'],
   }).toString();
 } catch {
