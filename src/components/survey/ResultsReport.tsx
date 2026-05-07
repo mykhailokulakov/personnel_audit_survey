@@ -94,41 +94,6 @@ function downloadJSON(result: ScoringResult) {
   URL.revokeObjectURL(url);
 }
 
-async function exportPdf(containerRef: React.RefObject<HTMLDivElement | null>, code: string) {
-  const element = containerRef.current;
-  if (!element) return;
-  const [{ default: html2canvasLib }, { jsPDF }] = await Promise.all([
-    import('html2canvas'),
-    import('jspdf'),
-  ]);
-  // Test environments can inject a stub via window.__html2canvasMock to avoid
-  // headless-incompatible canvas rendering while still exercising the jsPDF path.
-  const html2canvasImpl =
-    (window as Window & { __html2canvasMock?: typeof html2canvasLib }).__html2canvasMock ??
-    html2canvasLib;
-  const canvas = await html2canvasImpl(element, { scale: 2, useCORS: true, logging: false });
-  const imgData = canvas.toDataURL('image/png');
-  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
-  const imgWidth = pageWidth - 20;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-  // Paginate: step by a full page height so adjacent pages share no overlap.
-  // Image is repositioned upward by pageHeight on each subsequent page, and
-  // jsPDF clips any content that falls outside [0, pageHeight].
-  let pageIndex = 0;
-  while (pageIndex * pageHeight < imgHeight + 10) {
-    if (pageIndex > 0) pdf.addPage();
-    pdf.addImage(imgData, 'PNG', 10, 10 - pageIndex * pageHeight, imgWidth, imgHeight);
-    pageIndex++;
-  }
-
-  pdf.save(`assessment-${code}.pdf`);
-  // Allow test environments to observe that pdf.save() completed without error.
-  (window as Window & { __onPdfSaved?: () => void }).__onPdfSaved?.();
-}
-
 function copyResultLink(code: string) {
   const url = `${window.location.origin}/results?code=${encodeURIComponent(code)}`;
   void (navigator.clipboard as Clipboard | undefined)?.writeText(url).catch(() => {});
@@ -150,7 +115,8 @@ export function ResultsReport({ result }: Props) {
   const handlePdfExport = async () => {
     setPdfError(false);
     try {
-      await exportPdf(containerRef, respondentCode);
+      const { exportPdf } = await import('@/lib/pdf-export');
+      await exportPdf(containerRef.current, respondentCode);
     } catch {
       setPdfError(true);
     }
